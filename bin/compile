@@ -93,7 +93,7 @@ cp $BUILD_DIR/$PROFILE $DESTDIR/tlpkg/install.profile
 echo "*********************"
 echo "TeXLive environment installation and packaging complete."
 echo "Distribution: $DESTDIR"
-echo "Don't forget to add ${BINDIR} to your PATH."
+echo "Don't forget to add $BIN_DIR to your PATH."
 
 # test the xelatex
 xelatex --shell-escape -synctex=1 -interaction=nonstopmode $BUILD_DIR/buildpack/bin/x86_64-linux/test.tex
