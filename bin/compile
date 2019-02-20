@@ -30,12 +30,12 @@ cat > $PROFILE <<EOF
 # It will NOT be updated and reflects only the
 # installation profile at installation time.
 selected_scheme scheme-custom
-TEXDIR /app/buildpack
+TEXDIR $BUILD_DIR/buildpack
 TEXMFCONFIG \$TEXMFSYSCONFIG
 TEXMFHOME \$TEXMFLOCAL
-TEXMFLOCAL /app/buildpack/texmf-local
-TEXMFSYSCONFIG /app/buildpack/texmf-config
-TEXMFSYSVAR /app/buildpack/texmf-var
+TEXMFLOCAL $BUILD_DIR/buildpack/texmf-local
+TEXMFSYSCONFIG $BUILD_DIR/buildpack/texmf-config
+TEXMFSYSVAR $BUILD_DIR/buildpack/texmf-var
 TEXMFVAR /tmp
 
 binary_x86_64-linux 1
