@@ -99,6 +99,7 @@ echo "Distribution: $DESTDIR"
 echo "Don't forget to add $BIN_DIR to your PATH."
 
 # test the xelatex
+set +e  # xelatex gives non-zero exitstatus even because of warnings
 xelatex --shell-escape -synctex=1 -interaction=nonstopmode $BUILD_DIR/buildpack/bin/x86_64-linux/test.tex
 
 exit 0
