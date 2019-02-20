@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+# bin/compile <BUILD_DIR> <CACHE_DIR> <ENV_DIR>
+
+# Abort on errors!
+set -e
+
+# Paths constants
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+BIN_DIR=$(cd $(dirname $0); pwd)  # absolute path
+cd $BUILD_DIR
+
+# add the XeLaTeX to the future PATH + update actual PATH
+echo ":$BUILD_DIR/buildpack/bin/x86_64-linux" >> $ENV_DIR/PATH
+echo ":$BUILD_DIR/buildpack/bin/x86_64-linux" >> $ENV_DIR/BIN_PATH
+export PATH="$PATH:$BUILD_DIR/buildpack/bin/x86_64-linux"
+
+INSTALLER_URL="http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz"
+INSTALLER_ARCHIVE="installer-tl-unix.tar.gz"
+PLATFORM=$(uname -m)-$(uname -s | tr A-Z a-z)
+DESTDIR=$BUILD_DIR/buildpack
+PROFILE="texlive.profile"
+
+
+# Prepare profile for install-tl script
+rm -f $PROFILE
+cat > $PROFILE <<EOF
+# texlive.profile written on $(date)
+# It will NOT be updated and reflects only the
+# installation profile at installation time.
+selected_scheme scheme-custom
+TEXDIR $DESTDIR
+TEXMFCONFIG \$TEXMFSYSCONFIG
+TEXMFHOME \$TEXMFLOCAL
+TEXMFLOCAL $DESTDIR/texmf-local
+TEXMFSYSCONFIG $DESTDIR/texmf-config
+TEXMFSYSVAR $DESTDIR/texmf-var
+TEXMFVAR /tmp
+
+binary_${PLATFORM} 1
+
+collection-xetex 1
+
+in_place 1
+instopt_adjustpath 0
+instopt_adjustrepo 1
+instopt_letter 0
+instopt_portable 0
+instopt_write18_restricted 1
+
+tlpdbopt_autobackup 1
+tlpdbopt_backupdir tlpkg/backups
+tlpdbopt_create_formats 1
+tlpdbopt_desktop_integration 1
+tlpdbopt_file_assocs 1
+tlpdbopt_generate_updmap 0
+tlpdbopt_install_docfiles 1
+tlpdbopt_install_srcfiles 1
+tlpdbopt_post_code 1
+tlpdbopt_sys_bin /usr/bin
+tlpdbopt_sys_info /usr/local/share/info
+tlpdbopt_sys_man /usr/local/share/man
+tlpdbopt_w32_multi_user 1
+
+
+option_doc 0
+option_fmt 1
+option_path
+option_src 0
+EOF
+
+
+rm -f $PROFILE
+cat > $PROFILE <<EOF
+# texlive.profile written on St feb 20 07:47:02 CET 2019
+# It will NOT be updated and reflects only the
+# installation profile at installation time.
+selected_scheme scheme-custom
+TEXDIR /app/buildpack
+TEXMFCONFIG \$TEXMFSYSCONFIG
+TEXMFHOME \$TEXMFLOCAL
+TEXMFLOCAL /app/buildpack/texmf-local
+TEXMFSYSCONFIG /app/buildpack/texmf-config
+TEXMFSYSVAR /app/buildpack/texmf-var
+TEXMFVAR /tmp
+
+binary_x86_64-linux 1
+
+collection-basic 1
+collection-latex 1
+collection-latexrecommended 1
+collection-xetex 1
+
+option_adjustrepo 1
+option_autobackup 1
+option_backupdir tlpkg/backups
+option_desktop_integration
+option_doc 0
+option_file_assocs 
+option_fmt 1
+option_letter
+option_path
+option_post_code 1
+option_src 0
+option_sys_bin /usr/local/bin
+option_sys_info /usr/local/share/info
+option_sys_man /usr/local/share/man
+option_w32_multi_user 1
+option_write18_restricted 1
+portable 1
+
+EOF
+
+echo "now we are here $(pwd); BIN_DIR is this: $BIN_DIR"
+ls $BIN_DIR
+
+# download installer archive, open and run installer
+rm -f $INSTALLER_ARCHIVE  # TODO uncomment
+curl -L $INSTALLER_URL > $INSTALLER_ARCHIVE  # TODO uncomment
+tar xzf $INSTALLER_ARCHIVE
+./"install-tl-"*/install-tl -profile $PROFILE
+
+
+# Add/remove custom packages
+while read -r line; do
+    $DESTDIR/bin/$PLATFORM/tlmgr install $line
+done < $BUILD_DIR/tex_uninstall.txt
+
+if [ -f $BUILD_DIR/tex_uninstall.txt ]; then
+    while read -r line; do
+        $DESTDIR/bin/$PLATFORM/tlmgr remove --force $line
+    done < $BUILD_DIR/tex_uninstall.txt
+fi
+
+# copy test .tex file for custom tests
+cp $BIN_DIR/../test.tex $BUILD_DIR/buildpack/bin/x86_64-linux/
+# Keep a copy of our profile
+cp $BUILD_DIR/$PROFILE $DESTDIR/tlpkg/install.profile
+
+# final message
+echo "*********************"
+echo "TeXLive environment installation and packaging complete."
+echo "Distribution: $DESTDIR"
+echo "Don't forget to add ${BINDIR} to your PATH."
+
+# test the xelatex
+xelatex --shell-escape -synctex=1 -interaction=nonstopmode $BUILD_DIR/buildpack/bin/x86_64-linux/test.tex
+
+exit 0
+
