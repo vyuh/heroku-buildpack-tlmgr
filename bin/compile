@@ -119,6 +119,8 @@ mkdir -p /app/pics/
 cp $BIN_DIR/../a.png /app/pics/
 echo "Content of /app/pics"
 ls /app/pics
+echo "we are here" 
+pwd
 # Keep a copy of our profile
 cp $BUILD_DIR/$PROFILE $DESTDIR/tlpkg/install.profile
 
