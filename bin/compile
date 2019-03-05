@@ -115,8 +115,8 @@ fi
 
 # copy test .tex file for custom tests
 cp $BIN_DIR/../test.tex $BUILD_DIR/buildpack/bin/x86_64-linux/
-mkdir -p $BUILD_DIR/pics/
-cp $BIN_DIR/../a.png $BUILD_DIR/pics/
+mkdir -p /app/pics/
+cp $BIN_DIR/../a.png /app/pics/
 # Keep a copy of our profile
 cp $BUILD_DIR/$PROFILE $DESTDIR/tlpkg/install.profile
 
