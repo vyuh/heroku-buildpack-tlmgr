@@ -91,7 +91,7 @@ echo "Setting the preffered CTAN repo."
 if [ -f $BUILD_DIR/tex_repos.txt ]; then
     read -r line <$BUILD_DIR/tex_repos.txt
     echo "Using custom repo from tex_repos.txt: $line"
-    $DESTDIR/bin/$PLATFORM/tlmgr option repository set $line
+    $DESTDIR/bin/$PLATFORM/tlmgr option repository $line
 else
     echo "No custom repo specified in tex_repos.txt. Using default ones."
     $DESTDIR/bin/$PLATFORM/tlmgr option repository ctan
