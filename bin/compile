@@ -40,7 +40,13 @@ TEXMFVAR /tmp
 
 binary_x86_64-linux 1
 
-# collection-basic 1
+collection-basic 1
+## comment the following collection-* to MINIMIZE the texlive installation size + compile time!
+# collection-fontsrecommended 1
+# collection-fontutils 1
+# collection-formatsextra 1
+collection-picturess 1
+# collection-texworks 1
 collection-xetex 1
 
 option_adjustrepo 1
@@ -60,6 +66,11 @@ option_sys_man /usr/local/share/man
 option_w32_multi_user 1
 option_write18_restricted 1
 portable 1
+
+tlpdbopt_create_formats 1
+tlpdbopt_generate_updmap 1
+tlpdbopt_install_srcfiles 1
+tlpdbopt_post_code 1
 
 EOF
 
