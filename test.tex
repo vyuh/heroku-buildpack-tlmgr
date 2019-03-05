@@ -1,29 +1,2503 @@
-\documentclass{article}
-\usepackage{graphicx}
+apti     \documentclass[10pt,a4paper,UTF8]{article}
+% \documentclass{book}
+%\usepackage[a4paper, total={170mm,220mm, left=20mm, top=50mm}]{geometry}
+\usepackage[a4paper, total={160mm,220mm}, left=25mm, top=50mm]{geometry}
+\usepackage{graphicx}  % for images
+%\usepackage{svg}
+%\usepackage{caption}  % for subfigures / minipage image
+\usepackage{float}  % for images side-by-side
+% \usepackage{bbding}  % for checkmarks: ftp://ftp.dante.de/tex-archive/fonts/bbding/bbding.pdf
+\usepackage{pifont}  % for special signs: http://willbenton.com/wb-images/pifont.pdf
+% \usepackage{subcaption}  % for subfigures
+% \usepackage{filecontents}  % for base64 images
+% \graphicspath{ {./} } % for images
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\usepackage{booktabs}
+\usepackage{fontspec} % to use a custom font (e.g., Roboto). To use with lualatex instead of pdflatex
+% \setmainfont{ Roboto } % to be used with lualatex
+\setmainfont[Path=/app/fonts/roboto/,
+     Extension      = .ttf,
+     UprightFont    = *-Regular,
+     ItalicFont     = *-Italic,
+     BoldFont       = *-Bold,
+     BoldItalicFont = *-BoldItalic,
+     ]{Roboto} % ]{ Roboto }
+\usepackage{lastpage} % to use the last page number in footer
+\usepackage[nodayofweek]{datetime} % to get months as a words, not numbers
+\newdateformat{mydate}{\twodigit{\THEDAY}{ }\monthname[\THEMONTH], \THEYEAR}  % custom date format: https://tex.stackexchange.com/questions/112932/today-month-as-text
+%\usepackage[nodayofweek]{datetime}
+\usepackage{enumitem} % for lists (itemize)
+\setlist[description]{labelindent=-0.5em}
+\usepackage[table,xcdraw]{xcolor} % for tables
+\usepackage{longtable}  % to split tables over more pages: https://tex.stackexchange.com/questions/26462/make-a-table-span-multiple-pages
+\usepackage{multirow} % for tables
+\usepackage{array} % for tables
+\usepackage{needspace}  % to make section go to newpage if there is not enough space
+
+\renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
+\renewcommand{\thetable}{\arabic{section}.\arabic{table}}
+%\usepackage{siunitx}  % for tables number format S: https://latex.org/forum/viewtopic.php?t=24435
+%\usepackage{tabularx}  % for better tables
+%\usepackage{ltablex}  % connecting longtable and tabularx
+\usepackage{tabu}  % docs: http://mirrors.ibiblio.org/CTAN/macros/latex/contrib/tabu/tabu.pdf
+%\usepackage{mwe}  % for vertical table allignment: https://tex.stackexchange.com/questions/19080/how-to-vertically-center-text-with-an-image-in-the-same-row-of-a-table
+
+% some table settings:
+%\setlength\extrarowheight{4pt}  % do not use with \arraystretch
+\renewcommand{\arraystretch}{1.3}  % to make table lines higher
+\setlength{\tabcolsep}{2pt}
+\setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+\setlength\LTright{0pt} % default: \fill
+%\setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+
+%\usepackage[italian,english]{babel} % to get some another languages later on (using \selectlanguage{italian})
+%\usepackage{CJK}  % for chinese
+%\usepackage[UTF8]{ctex}  % for chinese TODO: test the ideas from here: https://tex.stackexchange.com/questions/17611/how-does-one-type-chinese-in-latex
+
+\usepackage{color} % for colors
+\definecolor{sg_orange}{HTML}{C31E20}
+%\definecolor{color_lines}{HTML}{}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}  % to have header and footer
+%\setlength{\headheight}{15.2pt}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{lightgray}\leaders\hrule height \headrulewidth\hfill}}
+%\renewcommand\headrule{\hrulefill\raisebox{-2.1pt}[10pt][10pt]{\quad\decofourleft\decotwo\decofourright\quad}\hrulefill}
+\usepackage{grffile} % to manage fancy characters in figure file names (i.e., underscores)
+
+\usepackage{titlesec} % for setting common styles used in document https://tex.stackexchange.com/questions/59726/change-size-of-section-subsection-subsubsection-paragraph-and-subparagraph-ti
+\titleformat{\section}[block]
+    {\normalfont\Large\bfseries\color{sg_orange}}
+%    {\normalfont\fontsize{20}{25}\bfseries\color{sg_orange}}  % option with specific font size \fontsize{size}{baselineskip}
+    {\thesection}
+    {0.2em}
+%    {\MakeUppercase}
+    {}
+\titleformat{\paragraph}[leftmargin]
+    {\normalfont\normalsize}
+    {\theparagraph}
+    {}
+    {}
+%\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{\the\fontdimen2\font}
+\titlespacing*{\section}{0pt}{*8}{*2}
+\titlespacing*{\paragraph}{0pt}{*0}{*10}
+%\setlength{\parskip}{\baselineskip} % for empty line between paragraphs: https://tex.stackexchange.com/questions/49188/how-to-insert-vertical-space-between-paragraphs
+\setlength{\parindent}{0pt}
+
+
+\usepackage[hidelinks]{hyperref}  % to make clickable table of contents
+\hypersetup{linkcolor=black,colorlinks=true,urlcolor={sg_orange},citecolor={sg_orange}}  % to set up link colors (probably unnecessary): https://en.wikibooks.org/wiki/LaTeX/Hyperlinks
+\urlstyle{same} % to use the same font for URLs
+
+% polyglossia stuff:
+%\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage[numerals=maghrib]{english}
+%\setmainlanguage{ english }
+%
+
+
+% the next 5 lines are to set the figure positioning. Figures in spare pages are centered to
+% cover all the blank space. With these settings they are forced to align to the top of the page
+%\makeatletter
+%\setlength\@fptop{0pt}
+%\setlength\@fpsep{30pt plus 0fil}
+%\setlength\@fpbot{0pt}
+%\makeatother
+
+% captions:
+\usepackage[singlelinecheck=false, font=footnotesize,labelfont=bf]{caption}  % set up of the caption: https://tex.stackexchange.com/questions/86120/font-size-of-figure-caption-header
+%\usepackage[singlelinecheck=false, labelfont={bf,sc}]{caption}  % for better captions
+%\captionsetup[table]{justification=raggedright}
+%\captionsetup[table]{format=hang}
+%\captionsetup[table]{labelsep=space}
+%\captionsetup[table]{margin={-10pt,0pt}}
+\setlength{\abovetopsep}{1ex} % to set up the separation distance between the caption and the table
+
+% page heights:
+\setlength\topmargin{-50pt} % Top margin
+\setlength\headheight{20pt} % Header height
+%\setlength\textwidth{7.0in} % Text width
+%\setlength\textheight{9.5in} % Text height
+\setlength\textheight{255mm} % Text height
+%\setlength\oddsidemargin{-30pt} % Left margin
+%\setlength\evensidemargin{-30pt} % Left margin (even pages) - only relevant with 'twoside' article option
+
+% Redefinition of ToC command to get centered heading
+\usepackage[tocflat]{tocstyle}  % https://tex.stackexchange.com/questions/157396/formatting-of-the-table-of-contents
+\newtocstyle[standard][leaders]{mytocstyle}{\settocfeature[1]{entryhook}{\normalfont}}
+\usetocstyle{mytocstyle}
+%\usetocstyle{allwithdot}
+\makeatletter
+\renewcommand\tableofcontents{
+    \section*{\contentsname
+        \@mkboth{\normalfont\contentsname}{\normalfont\contentsname}
+%        \@mkboth{\contentsname}{\contentsname}
+    }
+%  {\normalfont\LARGE\bfseries\color{sg_orange}\contentsname}
+%  {\LARGE\bfseries\color{sg_orange}\contentsname}\hfill\null\par
+  \@starttoc{toc}
+}
+\makeatother
+
+
+
+
 
 \begin{document}
+%\begin{CJK}{UTF8}{gbsn}  % some chinese stuff
 
-\title{Introduction to \LaTeX{}}
-\author{Author's Name}
+%
 
-\maketitle
+\fancyhf{}
+\fancyhead[R]{ {\footnotesize Granci power!, }  }
+%\fancyhead[R]{ PROSPECT PV energy review  \newline Granci power!,   }
+\fancyhead[L]{\includegraphics[width=2cm]{/app/pics/a.png}}  % {\bfseries\MakeUppercase{  prospect}}
+\fancyfoot[R]{ {\footnotesize \thepage / \pageref{LastPage}}}
+% \fancyfoot[L]{Chapter \nouppercase{\leftmark} \ {\textcopyright} Solargis, {\monthname} \the\year}
+%\fancyfoot[L]{ {\textcopyright} Solargis, {\monthname} \the\year}
+\fancyfoot[L]{ {\footnotesize {\textcopyright} {\the\year} Solargis}}
+%\fancyfoot[L]{ {\textcopyright} Solargis, \the\year}
+%\fancyfoot[L]{ {\textcopyright} Solargis, {\mydate\today}}
+%\vspace
+%\renewcommand{\headrulewidth}{0.4pt}
 
-\begin{abstract}
-The abstract text goes here.
-\end{abstract}
 
-\section{Introduction}
-Here is the text of your introduction.
 
-\begin{equation}
-    \label{simple_equation}
-    \alpha = \sqrt{ \beta }
-\end{equation}
+%\title{  }
+%\title{  }
+%%\author{\textenglish{Solargis\texttrademark  s.r.o}}
+%\author{\textenglish{Solargis\texttrademark  s.r.o}}
+%
+%\maketitle
+%\thispagestyle{empty}
+%
+%\newpage
+%\setcounter{page}{1}
 
-\subsection{Subsection Heading Here}
-Write your subsection text here.
 
-\section{Conclusion}
-Write your conclusion here.
+\begin{titlepage}
+%	\centering
+	\raggedright
+%	\includegraphics[width=4cm]{/app/pics/a.png} {\huge\bfseries\MakeUppercase{  prospect}}
+%	\includegraphics[width=8cm]{/app/pics/a.png} {\huge\bfseries\MakeUppercase{}}
+	\includegraphics[width=8cm]{/app/pics/a.png}
+%	\begin{tabular}{ll}  % https://tex.stackexchange.com/questions/19080/how-to-vertically-center-text-with-an-image-in-the-same-row-of-a-table
+%		\raisebox{-.5\height}{\includegraphics[width=4cm]{/app/pics/a.png}} & \huge\bfseries\MakeUppercase{  prospect}\\
+%	\end{tabular}
+	\par
+%	\includesvg{/home/branoc/Pictures/test.svg}
+	\vspace{2cm}
+%	{\huge\bfseries Pigeons love doves\par}
+	\hspace*{-0.08\textwidth}\includegraphics[width=1.16\textwidth]{/app/pics/a.png}\par
+	\vspace{1cm}
+%	\vfill
+%    {\scshape\LARGE\color{sg_orange} Preliminary assessment of the photovoltaic electricity production \par}
+    {\huge\bfseries\color{sg_orange} Preliminary assessment of the photovoltaic electricity production \par}
+	\vspace{1cm}
+%	{\scshape\Large  \par}
+	{\large\bfseries\color{sg_orange} Project: Granci power!,  \par}
 
+%	\paragraph{} Geographical coordinates: 48.000000, 16.000000 (48°00'00", 16°00'00")
+%	\paragraph{} Report number: PROSPECT-10872-190228-1019
+%	\paragraph{} Type of report: PROSPECT PV energy review
+%%	\paragraph{} Report generated: \mydate\today, \currenttime
+%	\paragraph{} Report generated: 28 Feb 2019, 10:19
+%	\paragraph{} Generated by: Branislav Cief
+%	\paragraph{} Customer: Branova company
+
+	\vspace{1cm}
+	\bgroup
+	\def\arraystretch{1.5}%  https://tex.stackexchange.com/questions/31672/column-and-row-padding-in-tables
+	\setlength{\tabcolsep}{0}
+    \begin{tabular} { p{5cm}p{15cm} }
+    Geographical coordinates & 48.000000, 16.000000 (48°00'00", 16°00'00") \\
+    Report number & PROSPECT-10872-190228-1019 \\
+    Type of report & PROSPECT PV energy review \\
+    Report generated & 28 Feb 2019, 10:19 \\
+    Generated by & Branislav Cief \\
+    Customer & Branova company
+    \end{tabular}
+	\egroup
+
+	\vfill
+	\vspace{2cm}
+
+% Bottom of the page, sizes defined here: https://tex.stackexchange.com/questions/24599/what-point-pt-font-size-are-large-etc
+	{\scriptsize Solargis s.r.o., Mytna 48, 811 07 Bratislava, Slovakia \\}
+	{\scriptsize \url{www.solargis.com} • \href{mailto:contact@solargis.com}{contact@solargis.com} • tel.: +421 2 4319 1708 \\}
+	{\scriptsize {\textcopyright} {\the\year} Solargis \\}
+%	{\tiny © \the\year, Solargis \\}
+
+\end{titlepage}
+
+{\small  % size definition here: https://tex.stackexchange.com/questions/24599/what-point-pt-font-size-are-large-etc
+
+
+\tableofcontents
+%\addcontentsline{toc}{section}{\listfigurename}
+%\addcontentsline{toc}{section}{\listtablename}
+
+
+\Needspace{5\baselineskip}
+\section{ Overview }
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+% BEGIN of the table  Long-term yearly averages 
+
+
+%  %TODO - this does go well with minipage, but messes up with table numbering!
+%%\captionof{table}{ Long-term yearly averages }
+%%\caption{ Long-term yearly averages }
+%%\label{ Long-term-yearly averages }
+%
+
+%\resizebox{\textwidth}{*} {
+
+
+
+%    \setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+%    \setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+%    \setlength\LTright{0pt} % default: \fill
+%    \begin{longtabu} to \textwidth{ X[4,L]X[2,L]X[1,R]X[2,L] }
+     \begin{longtabu} to \textwidth{ X[4,L]X[2,L]X[1,R]X[2,L] }
+    
+%    \begin{footnotesize}
+%    
+%    \small
+%    \begin{tabular} { X[4,L]X[2,L]X[1,R]X[2,L] }
+%    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill} } X[4,L]X[2,L]X[1,R]X[2,L] }
+%    \begin{tabular*}{\textwidth} X[4,L]X[2,L]X[1,R]X[2,L] }
+%    \begin{tabularx}{\linewidth} { X[4,L]X[2,L]X[1,R]X[2,L] }
+    
+%    \captionof{table}{ Long-term yearly averages }
+    \caption{ Long-term yearly averages }
+    %\label{ Long-term-yearly averages }
+    
+
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+
+    
+
+    \textbf{Global horizontal irradiation} & 
+    
+     GHI
+    &  1159
+    &  kWh/m\textsuperscript{2}
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Diffuse horizontal irradiation} & 
+    
+     DIF
+    &  580
+    &  kWh/m\textsuperscript{2}
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Direct normal irradiation} & 
+    
+     DNI
+    &  1037
+    &  kWh/m\textsuperscript{2}
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Air temperature} & 
+    
+     TEMP
+    &  8.6
+    &  °C
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Global tilted irradiation} & 
+    
+     GTI
+    &  1374
+    &  kWh/m\textsuperscript{2}
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Specific photovoltaic power output} & 
+    
+     PVOUT\_specific
+    &  1108
+    &  kWh/kWp
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Total photovoltaic power output} & 
+    
+     PVOUT\_total
+    &  332.441
+    &  MWh
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Performance ratio} & 
+    
+     PR
+    &  80.7
+    &  \%
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+%    
+%    \end{longtable} 
+%    \end{longtabu} 
+%    \end{longtabu}
+     \end{longtabu} 
+    
+%    
+%    \end{footnotesize}
+%    \end{tabular} 
+%    \end{tabularx} 
+%    \end{tabular*} 
+%} % end of \resizebox
+%\end{table}
+
+% END of the table  Long-term yearly averages 
+\newpage\Needspace{5\baselineskip}
+\section{ Project info }
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+% BEGIN of the table 
+
+
+%
+
+%\resizebox{\textwidth}{*} {
+
+
+
+%    \setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+%    \setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+%    \setlength\LTright{0pt} % default: \fill
+%    \begin{longtabu} to \textwidth{ X[1.5,L]X[4,L] }
+     \begin{longtabu} to \textwidth{ X[1.5,L]X[4,L] }
+    
+%    \begin{footnotesize}
+%    
+%    \small
+%    \begin{tabular} { X[1.5,L]X[4,L] }
+%    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill} } X[1.5,L]X[4,L] }
+%    \begin{tabular*}{\textwidth} X[1.5,L]X[4,L] }
+%    \begin{tabularx}{\linewidth} { X[1.5,L]X[4,L] }
+    
+
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+
+    
+
+    \textbf{Project name} & 
+    
+     Granci power!
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Address} & 
+    
+     Geocoded address
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Country} & 
+    
+     
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Geographical coordinates} & 
+    
+     48.000000, 16.000000 (48°00'00", 16°00'00")
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Time zone} & 
+    
+     UTC+00, undefined [undefined]
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Elevation} & 
+    
+     486 meters above sea level
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Land cover} & 
+    
+     Tree cover, broadleaved, deciduous (\textgreater15\%)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Population density} & 
+    
+     13 inh./km\textsuperscript{2}
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Location on the map} & 
+    
+     \url{https://apps.solargis.com/prospect/map?c=48.000000,16.000000,10\&s=48.000000,16.000000}
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+%    
+%    \end{longtable} 
+%    \end{longtabu} 
+%    \end{longtabu}
+     \end{longtabu} 
+    
+%    
+%    \end{footnotesize}
+%    \end{tabular} 
+%    \end{tabularx} 
+%    \end{tabular*} 
+%} % end of \resizebox
+%\end{table}
+
+% END of the table 
+%\vspace*{-7mm}
+\begin{figure}[H]  % inspired by: https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Project location }
+%    \captionof{figure}{ Project location }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+%\vspace*{-7mm}
+\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Detailed map view }
+%    \captionof{figure}{ Detailed map view }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+\end{figure}%\vspace*{-7mm}
+\begin{figure}[H]  % inspired by: https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Site horizon and sunpath }
+%    \captionof{figure}{ Site horizon and sunpath }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+%\vspace*{-7mm}
+\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Day length and solar zenith angle }
+%    \captionof{figure}{ Day length and solar zenith angle }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+\end{figure}\newpage\Needspace{5\baselineskip}
+\section{ PV configuration }
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+% BEGIN of the table 
+
+
+%
+
+%\resizebox{\textwidth}{*} {
+
+
+
+%    \setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+%    \setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+%    \setlength\LTright{0pt} % default: \fill
+%    \begin{longtabu} to \textwidth{ X[2,L]X[3,L] }
+     \begin{longtabu} to \textwidth{ X[2,L]X[3,L] }
+    
+%    \begin{footnotesize}
+%    
+%    \small
+%    \begin{tabular} { X[2,L]X[3,L] }
+%    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill} } X[2,L]X[3,L] }
+%    \begin{tabular*}{\textwidth} X[2,L]X[3,L] }
+%    \begin{tabularx}{\linewidth} { X[2,L]X[3,L] }
+    
+
+    
+
+    
+
+    \textbf{\begin{minipage}{0.3\textwidth}\vspace*{-10mm}\includegraphics[width=\linewidth]{/app/pics/a.png}\end{minipage}} & 
+    
+     \vspace*{-15mm}{\Large\textbf{Rooftop small}} \newline {\footnotesize Photovoltaic system mounted on a tilted roof of a residential building. Azimuth and tilt of the PV modules are homogeneous and the modules do not shade each other. The modules are mounted on rails attached to a tilted roof, thus allowing back-side ventilation. This type of PV system is usually directly connected to a low-voltage grid through an inverter. No electricity storage is considered.} \newline
+     \\
+    
+%    
+%    \end{longtable} 
+%    \end{longtabu} 
+%    \end{longtabu}
+     \end{longtabu} 
+    
+%    
+%    \end{footnotesize}
+%    \end{tabular} 
+%    \end{tabularx} 
+%    \end{tabular*} 
+%} % end of \resizebox
+%\end{table}
+
+% END of the table 
+% BEGIN of the table 
+
+
+%
+
+%\resizebox{\textwidth}{*} {
+
+
+
+%    \setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+%    \setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+%    \setlength\LTright{0pt} % default: \fill
+%    \begin{longtabu} to \textwidth{ X[2,L]X[3,L] }
+     \begin{longtabu} to \textwidth{ X[2,L]X[3,L] }
+    
+%    \begin{footnotesize}
+%    
+%    \small
+%    \begin{tabular} { X[2,L]X[3,L] }
+%    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill} } X[2,L]X[3,L] }
+%    \begin{tabular*}{\textwidth} X[2,L]X[3,L] }
+%    \begin{tabularx}{\linewidth} { X[2,L]X[3,L] }
+    
+
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+
+    
+
+    \textbf{System size} & 
+    
+     Installed capacity: 300 kWp
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{PV module type} & 
+    
+     c-Si - crystalline silicon (mono or polycrystalline)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Geometry of PV modules} & 
+    
+     Azimuth: 184° · Tilt: 32°
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Inverter type} & 
+    
+     Small inverter
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Transformer type} & 
+    
+     None
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Snow and soiling losses at PV modules} & 
+    
+     Soiling losses: 4.5\% · Snow losses: 0.0\%
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{Cabling losses} & 
+    
+     DC cabling 1\% · DC mismatch 0.8\% · AC cabling 0.2\%
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline \textbf{System availability} & 
+    
+     97\%
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+%    
+%    \end{longtable} 
+%    \end{longtabu} 
+%    \end{longtabu}
+     \end{longtabu} 
+    
+%    
+%    \end{footnotesize}
+%    \end{tabular} 
+%    \end{tabularx} 
+%    \end{tabular*} 
+%} % end of \resizebox
+%\end{table}
+
+% END of the table 
+\newpage\Needspace{5\baselineskip}
+\section{ Solar and meteo: Monthly statistics }
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\paragraph{} The most important site-specific meteorological parameter that determines solar electricity production is solar radiation, which fuels a PV power system. Power production is also influenced by air temperature. Other meteorological parameters also affect the performance, availability and aging of a PV system.% BEGIN of the table  Solar radiation and air temperature 
+
+
+%  %TODO - this does go well with minipage, but messes up with table numbering!
+%%\captionof{table}{ Solar radiation and air temperature }
+%%\caption{ Solar radiation and air temperature }
+%%\label{ Solar-radiation and air temperature }
+%
+
+%\resizebox{\textwidth}{*} {
+
+ {\footnotesize 
+
+%    \setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+%    \setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+%    \setlength\LTright{0pt} % default: \fill
+%    \begin{longtabu} to \textwidth{ X[1,L]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R] }
+     \begin{longtabu} to \textwidth{ X[1,L]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R] }
+    
+%    \begin{footnotesize}
+%     \begin{footnotesize} 
+%    \small
+%    \begin{tabular} { X[1,L]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R] }
+%    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill} } X[1,L]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R] }
+%    \begin{tabular*}{\textwidth} X[1,L]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R] }
+%    \begin{tabularx}{\linewidth} { X[1,L]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R] }
+    
+%    \captionof{table}{ Solar radiation and air temperature }
+    \caption{ Solar radiation and air temperature }
+    %\label{ Solar-radiation and air temperature }
+    
+
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+
+    
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{Month}&  \textbf{GHI}&  \textbf{DNI}&  \textbf{DIF}&  \textbf{D2G}&  \textbf{GTI\_opta}&  \textbf{TEMP} \\ %[-5pt]
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{{\color[HTML]{656565} {\normalfont }}}&  \textbf{{\color[HTML]{656565} {\normalfont kWh/m\textsuperscript{2}}}}&  \textbf{{\color[HTML]{656565} {\normalfont kWh/m\textsuperscript{2}}}}&  \textbf{{\color[HTML]{656565} {\normalfont kWh/m\textsuperscript{2}}}}&  \textbf{{\color[HTML]{656565} {\normalfont }}}&  \textbf{{\color[HTML]{656565} {\normalfont kWh/m\textsuperscript{2}}}}&  \textbf{{\color[HTML]{656565} {\normalfont °C}}} \\ %[-5pt]
+      \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \endhead
+    
+
+    
+     Jan
+    &  32
+    &  49
+    &  18
+    &  0.57
+    &  58
+    &  -1.3
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Feb
+    &  52
+    &  64
+    &  27
+    &  0.52
+    &  80
+    &  0.4
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Mar
+    &  90
+    &  90
+    &  45
+    &  0.50
+    &  117
+    &  3.8
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Apr
+    &  128
+    &  105
+    &  64
+    &  0.50
+    &  145
+    &  8.4
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     May
+    &  154
+    &  115
+    &  77
+    &  0.50
+    &  156
+    &  13.1
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Jun
+    &  162
+    &  115
+    &  81
+    &  0.50
+    &  158
+    &  16.6
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Jul
+    &  168
+    &  126
+    &  80
+    &  0.48
+    &  168
+    &  18.3
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Aug
+    &  147
+    &  124
+    &  67
+    &  0.46
+    &  161
+    &  17.8
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Sep
+    &  100
+    &  92
+    &  51
+    &  0.51
+    &  123
+    &  13.0
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Oct
+    &  66
+    &  74
+    &  35
+    &  0.53
+    &  94
+    &  8.6
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Nov
+    &  34
+    &  41
+    &  20
+    &  0.60
+    &  55
+    &  4.1
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Dec
+    &  26
+    &  42
+    &  15
+    &  0.58
+    &  49
+    &  -0.2
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+    \rowcolor[HTML]{E7E7E7 }
+    \textbf{Yearly}
+     & \textbf{1159}  & \textbf{1037}  & \textbf{580}  & \textbf{0.52}  & \textbf{1365}  & \textbf{8.6} 
+    \\
+    
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+%     \end{footnotesize} 
+%    \end{longtable}  }  % end of \scriptsize 
+%    \end{longtabu}  }  % end of \scriptsize 
+%    \end{longtabu}
+     \end{longtabu} 
+     }  % end of \scriptsize 
+%     \end{footnotesize} 
+%    \end{footnotesize}
+%    \end{tabular}  }  % end of \scriptsize 
+%    \end{tabularx}  }  % end of \scriptsize 
+%    \end{tabular*}  }  % end of \scriptsize 
+%} % end of \resizebox
+%\end{table}
+
+% END of the table  Solar radiation and air temperature 
+\paragraph{} Global tilted irradiation at optimum angle is calculated for azimuth 180° and optimal tilt 36°% BEGIN of the table  Other meteorological parameters 
+
+
+%  %TODO - this does go well with minipage, but messes up with table numbering!
+%%\captionof{table}{ Other meteorological parameters }
+%%\caption{ Other meteorological parameters }
+%%\label{ Other-meteorological parameters }
+%
+
+%\resizebox{\textwidth}{*} {
+
+ {\footnotesize 
+
+%    \setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+%    \setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+%    \setlength\LTright{0pt} % default: \fill
+%    \begin{longtabu} to \textwidth{ X[1,L]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R]X[1.2,R]X[1.2,R] }
+     \begin{longtabu} to \textwidth{ X[1,L]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R]X[1.2,R]X[1.2,R] }
+    
+%    \begin{footnotesize}
+%     \begin{footnotesize} 
+%    \small
+%    \begin{tabular} { X[1,L]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R]X[1.2,R]X[1.2,R] }
+%    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill} } X[1,L]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R]X[1.2,R]X[1.2,R] }
+%    \begin{tabular*}{\textwidth} X[1,L]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R]X[1.2,R]X[1.2,R] }
+%    \begin{tabularx}{\linewidth} { X[1,L]X[1,R]X[1,R]X[1,R]X[1,R]X[1,R]X[1.2,R]X[1.2,R] }
+    
+%    \captionof{table}{ Other meteorological parameters }
+    \caption{ Other meteorological parameters }
+    %\label{ Other-meteorological parameters }
+    
+
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+
+    
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{Month}&  \textbf{WS}&  \textbf{RH}&  \textbf{PREC}&  \textbf{PWAT}&  \textbf{SNOWD}&  \textbf{CDD}&  \textbf{HDD} \\ %[-5pt]
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{{\color[HTML]{656565} {\normalfont }}}&  \textbf{{\color[HTML]{656565} {\normalfont m/s}}}&  \textbf{{\color[HTML]{656565} {\normalfont \%}}}&  \textbf{{\color[HTML]{656565} {\normalfont mm}}}&  \textbf{{\color[HTML]{656565} {\normalfont kg/m\textsuperscript{2}}}}&  \textbf{{\color[HTML]{656565} {\normalfont days}}}&  \textbf{{\color[HTML]{656565} {\normalfont degree days}}}&  \textbf{{\color[HTML]{656565} {\normalfont degree days}}} \\ %[-5pt]
+      \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \endhead
+    
+
+    
+     Jan
+    &  3.9
+    &  88
+    &  37
+    &  8.4
+    &  16
+    &  0
+    &  593
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Feb
+    &  4.0
+    &  85
+    &  37
+    &  8.4
+    &  13
+    &  0
+    &  499
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Mar
+    &  4.0
+    &  79
+    &  50
+    &  9.8
+    &  6
+    &  0
+    &  437
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Apr
+    &  3.7
+    &  74
+    &  59
+    &  12.8
+    &  1
+    &  0
+    &  281
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     May
+    &  3.5
+    &  71
+    &  77
+    &  17.8
+    &  -1
+    &  5
+    &  147
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Jun
+    &  3.3
+    &  67
+    &  94
+    &  22.1
+    &  -1
+    &  37
+    &  71
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Jul
+    &  3.3
+    &  64
+    &  94
+    &  24.4
+    &  1
+    &  67
+    &  44
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Aug
+    &  2.9
+    &  63
+    &  85
+    &  24.0
+    &  0
+    &  56
+    &  56
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Sep
+    &  3.3
+    &  72
+    &  59
+    &  19.4
+    &  -1
+    &  7
+    &  147
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Oct
+    &  3.3
+    &  80
+    &  52
+    &  15.4
+    &  0
+    &  0
+    &  293
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Nov
+    &  3.6
+    &  86
+    &  55
+    &  12.1
+    &  3
+    &  0
+    &  418
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Dec
+    &  3.7
+    &  87
+    &  47
+    &  9.1
+    &  9
+    &  0
+    &  575
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+    \rowcolor[HTML]{E7E7E7 }
+    \textbf{Yearly}
+     & \textbf{3.6}  & \textbf{76}  & \textbf{746}  & \textbf{15.3}  & \textbf{49}  & \textbf{173}  & \textbf{3560} 
+    \\
+    
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+%     \end{footnotesize} 
+%    \end{longtable}  }  % end of \scriptsize 
+%    \end{longtabu}  }  % end of \scriptsize 
+%    \end{longtabu}
+     \end{longtabu} 
+     }  % end of \scriptsize 
+%     \end{footnotesize} 
+%    \end{footnotesize}
+%    \end{tabular}  }  % end of \scriptsize 
+%    \end{tabularx}  }  % end of \scriptsize 
+%    \end{tabular*}  }  % end of \scriptsize 
+%} % end of \resizebox
+%\end{table}
+
+% END of the table  Other meteorological parameters 
+\newpage%\vspace*{-7mm}
+\begin{figure}[H]  % inspired by: https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Global and diffuse horizontal irradiation }
+%    \captionof{figure}{ Global and diffuse horizontal irradiation }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+%\vspace*{-7mm}
+\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Direct normal irradiation }
+%    \captionof{figure}{ Direct normal irradiation }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+\end{figure}%\vspace*{-7mm}
+\begin{figure}[H]  % inspired by: https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Global tilted irradiation at optimum angle }
+%    \captionof{figure}{ Global tilted irradiation at optimum angle }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+%\vspace*{-7mm}
+\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Ratio of diffuse to global irradiation }
+%    \captionof{figure}{ Ratio of diffuse to global irradiation }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+\end{figure}%\vspace*{-7mm}
+\begin{figure}[H]  % inspired by: https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Air temperature }
+%    \captionof{figure}{ Air temperature }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+%\vspace*{-7mm}
+\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Wind speed }
+%    \captionof{figure}{ Wind speed }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+\end{figure}%\vspace*{-7mm}
+\begin{figure}[H]  % inspired by: https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Relative humidity }
+%    \captionof{figure}{ Relative humidity }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+%\vspace*{-7mm}
+\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Precipitation (rainfall) }
+%    \captionof{figure}{ Precipitation (rainfall) }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+\end{figure}%\vspace*{-7mm}
+\begin{figure}[H]  % inspired by: https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Precipitable water }
+%    \captionof{figure}{ Precipitable water }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+%\vspace*{-7mm}
+\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Snow days }
+%    \captionof{figure}{ Snow days }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+\end{figure}%\vspace*{-7mm}
+\begin{figure}[H]  % inspired by: https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Cooling degree days }
+%    \captionof{figure}{ Cooling degree days }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+%\vspace*{-7mm}
+\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Heating degree days }
+%    \captionof{figure}{ Heating degree days }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+\end{figure}\newpage\Needspace{5\baselineskip}
+\section{ PV electricity: Monthly statistics }
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\paragraph{} Theoretical estimate of solar electricity production by a photovoltaic system without considering the long-term ageing and performance degradation of PV modules and other system components.% BEGIN of the table  PV power output – long-term averages 
+
+
+%  %TODO - this does go well with minipage, but messes up with table numbering!
+%%\captionof{table}{ PV power output – long-term averages }
+%%\caption{ PV power output – long-term averages }
+%%\label{ PV-power output – long-term averages }
+%
+
+%\resizebox{\textwidth}{*} {
+
+ {\footnotesize 
+
+%    \setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+%    \setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+%    \setlength\LTright{0pt} % default: \fill
+%    \begin{longtabu} to \textwidth{ X[0.5,L]X[0.8,R]X[0.8,R]X[1,R]X[1,R]X[1,R]X[1,R]X[0.5,R] }
+     \begin{longtabu} to \textwidth{ X[0.5,L]X[0.8,R]X[0.8,R]X[1,R]X[1,R]X[1,R]X[1,R]X[0.5,R] }
+    
+%    \begin{footnotesize}
+%     \begin{footnotesize} 
+%    \small
+%    \begin{tabular} { X[0.5,L]X[0.8,R]X[0.8,R]X[1,R]X[1,R]X[1,R]X[1,R]X[0.5,R] }
+%    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill} } X[0.5,L]X[0.8,R]X[0.8,R]X[1,R]X[1,R]X[1,R]X[1,R]X[0.5,R] }
+%    \begin{tabular*}{\textwidth} X[0.5,L]X[0.8,R]X[0.8,R]X[1,R]X[1,R]X[1,R]X[1,R]X[0.5,R] }
+%    \begin{tabularx}{\linewidth} { X[0.5,L]X[0.8,R]X[0.8,R]X[1,R]X[1,R]X[1,R]X[1,R]X[0.5,R] }
+    
+%    \captionof{table}{ PV power output – long-term averages }
+    \caption{ PV power output – long-term averages }
+    %\label{ PV-power output – long-term averages }
+    
+
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+
+    
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{Month}&  \textbf{GTI}&  \textbf{GTI}&  \textbf{PVOUT\_total}&  \textbf{PVOUT\_total}&  \textbf{PVOUT\_specific}&  \textbf{PVOUT\_specific}&  \textbf{PR} \\ %[-5pt]
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{}&  \textbf{Monthly sum}&  \textbf{Daily average}&  \textbf{Monthly sum}&  \textbf{Daily average}&  \textbf{Monthly sum}&  \textbf{Daily average}&  \textbf{} \\ %[-5pt]
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{{\color[HTML]{656565} {\normalfont }}}&  \textbf{{\color[HTML]{656565} {\normalfont kWh/m\textsuperscript{2}}}}&  \textbf{{\color[HTML]{656565} {\normalfont Wh/m\textsuperscript{2}}}}&  \textbf{{\color[HTML]{656565} {\normalfont MWh}}}&  \textbf{{\color[HTML]{656565} {\normalfont kWh}}}&  \textbf{{\color[HTML]{656565} {\normalfont kWh/kWp}}}&  \textbf{{\color[HTML]{656565} {\normalfont Wh/kWp}}}&  \textbf{{\color[HTML]{656565} {\normalfont \%}}} \\ %[-5pt]
+      \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \endhead
+    
+
+    
+     Jan
+    &  57
+    &  1831
+    &  14.935
+    &  481.770
+    &  50
+    &  1606
+    &  87.6
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Feb
+    &  79
+    &  2810
+    &  20.353
+    &  726.890
+    &  68
+    &  2425
+    &  86.2
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Mar
+    &  117
+    &  3789
+    &  29.426
+    &  949.225
+    &  98
+    &  3165
+    &  83.5
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Apr
+    &  146
+    &  4861
+    &  35.381
+    &  1179.374
+    &  118
+    &  3933
+    &  80.9
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     May
+    &  159
+    &  5128
+    &  37.583
+    &  1212.362
+    &  125
+    &  4040
+    &  78.8
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Jun
+    &  162
+    &  5397
+    &  37.654
+    &  1255.145
+    &  126
+    &  4185
+    &  77.5
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Jul
+    &  171
+    &  5527
+    &  39.591
+    &  1277.141
+    &  132
+    &  4257
+    &  77.0
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Aug
+    &  162
+    &  5235
+    &  37.757
+    &  1217.979
+    &  126
+    &  4062
+    &  77.5
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Sep
+    &  123
+    &  4117
+    &  29.678
+    &  989.273
+    &  99
+    &  3298
+    &  80.1
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Oct
+    &  94
+    &  3023
+    &  23.344
+    &  753.040
+    &  78
+    &  2510
+    &  83.0
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Nov
+    &  54
+    &  1812
+    &  13.938
+    &  464.607
+    &  46
+    &  1548
+    &  85.5
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Dec
+    &  49
+    &  1571
+    &  12.799
+    &  412.861
+    &  43
+    &  1377
+    &  87.6
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+    \rowcolor[HTML]{E7E7E7 }
+    \textbf{Yearly}
+     & \textbf{1374}  & \textbf{3763}  & \textbf{332.441}  & \textbf{910.796}  & \textbf{1108}  & \textbf{3036}  & \textbf{80.7} 
+    \\
+    
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+%     \end{footnotesize} 
+%    \end{longtable}  }  % end of \scriptsize 
+%    \end{longtabu}  }  % end of \scriptsize 
+%    \end{longtabu}
+     \end{longtabu} 
+     }  % end of \scriptsize 
+%     \end{footnotesize} 
+%    \end{footnotesize}
+%    \end{tabular}  }  % end of \scriptsize 
+%    \end{tabularx}  }  % end of \scriptsize 
+%    \end{tabular*}  }  % end of \scriptsize 
+%} % end of \resizebox
+%\end{table}
+
+% END of the table  PV power output – long-term averages 
+%\vspace*{-7mm}
+\begin{figure}[H]  % inspired by: https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Specific photovoltaic power output }
+%    \captionof{figure}{ Specific photovoltaic power output }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+%\vspace*{-7mm}
+\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Global tilted irradiation }
+%    \captionof{figure}{ Global tilted irradiation }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+\end{figure}%\vspace*{-7mm}
+\begin{figure}[H]  % inspired by: https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Performance ratio }
+%    \captionof{figure}{ Performance ratio }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+%\vspace*{-7mm}
+\centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Air temperature }
+%    \captionof{figure}{ Air temperature }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    \end{minipage}
+    \hfill
+\end{figure}\newpage\Needspace{5\baselineskip}
+\section{ PV electricity: Hourly profiles }
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\paragraph{} PV power production profiles, shown below, are calculated as an average of all hourly data for each month. The profiles give an indication of changing power production patterns due to weather and the selected configuration of a PV system in the course of a day. It should be noted that the “average daily profile” is a theoretical concept, as in the majority of cases a profile is specific for each individual day of the year due to weather variability.%\vspace*{-7mm}
+\begin{figure}[H]  % inspired by: https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side\centering
+    
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Specific photovoltaic power output – hourly averages }
+%    \captionof{figure}{ Specific photovoltaic power output – hourly averages }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    
+\end{figure}\newpage% BEGIN of the table  Specific photovoltaic power output – hourly averages [Wh/kWp] 
+
+
+%  %TODO - this does go well with minipage, but messes up with table numbering!
+%%\captionof{table}{ Specific photovoltaic power output – hourly averages [Wh/kWp] }
+%%\caption{ Specific photovoltaic power output – hourly averages [Wh/kWp] }
+%%\label{ Specific-photovoltaic power output – hourly averages [Wh/kWp] }
+%
+
+%\resizebox{\textwidth}{*} {
+
+ {\footnotesize 
+
+%    \setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+%    \setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+%    \setlength\LTright{0pt} % default: \fill
+%    \begin{longtabu} to \textwidth{ X[1.2,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C] }
+     \begin{longtabu} to \textwidth{ X[1.2,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C] }
+    
+%    \begin{footnotesize}
+%     \begin{footnotesize} 
+%    \small
+%    \begin{tabular} { X[1.2,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C] }
+%    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill} } X[1.2,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C] }
+%    \begin{tabular*}{\textwidth} X[1.2,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C] }
+%    \begin{tabularx}{\linewidth} { X[1.2,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C]X[1,C] }
+    
+%    \captionof{table}{ Specific photovoltaic power output – hourly averages [Wh/kWp] }
+    \caption{ Specific photovoltaic power output – hourly averages [Wh/kWp] }
+    %\label{ Specific-photovoltaic power output – hourly averages [Wh/kWp] }
+    
+
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+
+    
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{}&  \textbf{Jan}&  \textbf{Feb}&  \textbf{Mar}&  \textbf{Apr}&  \textbf{May}&  \textbf{Jun}&  \textbf{Jul}&  \textbf{Aug}&  \textbf{Sep}&  \textbf{Oct}&  \textbf{Nov}&  \textbf{Dec} \\ %[-5pt]
+      \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \endhead
+    
+
+     0 - 1 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  1 - 2 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  2 - 3 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  3 - 4 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ BCCDC1 } 2
+    & \cellcolor[HTML]{ BDCEC1 } 6
+    & \cellcolor[HTML]{ BCCDC1 } 2
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  4 - 5 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ BDCEC1 } 6
+    & \cellcolor[HTML]{ C0D6C1 } 32
+    & \cellcolor[HTML]{ C2D8C1 } 40
+    & \cellcolor[HTML]{ C0D6C1 } 32
+    & \cellcolor[HTML]{ BDD0C1 } 13
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  5 - 6 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ BDCFC1 } 9
+    & \cellcolor[HTML]{ C8E0BF } 67
+    & \cellcolor[HTML]{ D7EABA } 106
+    & \cellcolor[HTML]{ D8EBB9 } 110
+    & \cellcolor[HTML]{ D3E8BB } 98
+    & \cellcolor[HTML]{ CBE2BE } 76
+    & \cellcolor[HTML]{ C2D9C1 } 42
+    & \cellcolor[HTML]{ BDCFC1 } 8
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  6 - 7 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ BFD4C1 } 27
+    & \cellcolor[HTML]{ D4E8BB } 99
+    & \cellcolor[HTML]{ FBF3AA } 186
+    & \cellcolor[HTML]{ FEE59F } 225
+    & \cellcolor[HTML]{ FEE59F } 225
+    & \cellcolor[HTML]{ FDE9A2 } 214
+    & \cellcolor[HTML]{ FCF0A7 } 196
+    & \cellcolor[HTML]{ EEF4B2 } 152
+    & \cellcolor[HTML]{ D2E7BB } 95
+    & \cellcolor[HTML]{ BED3C1 } 21
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  7 - 8 & 
+    
+    \cellcolor[HTML]{ CCE3BD } 79
+    & \cellcolor[HTML]{ EAF3B4 } 144
+    & \cellcolor[HTML]{ FDE7A0 } 221
+    & \cellcolor[HTML]{ FFC58E } 318
+    & \cellcolor[HTML]{ FFBC8C } 343
+    & \cellcolor[HTML]{ FFBC8C } 342
+    & \cellcolor[HTML]{ FFBE8C } 337
+    & \cellcolor[HTML]{ FFC48E } 321
+    & \cellcolor[HTML]{ FFD595 } 273
+    & \cellcolor[HTML]{ FDEBA4 } 208
+    & \cellcolor[HTML]{ DEEEB7 } 121
+    & \cellcolor[HTML]{ CBE2BE } 76
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  8 - 9 & 
+    
+    \cellcolor[HTML]{ FBF4AB } 183
+    & \cellcolor[HTML]{ FFDE9A } 247
+    & \cellcolor[HTML]{ FFC38E } 323
+    & \cellcolor[HTML]{ F3936E } 430
+    & \cellcolor[HTML]{ F3926E } 431
+    & \cellcolor[HTML]{ F3906C } 436
+    & \cellcolor[HTML]{ F28F6C } 437
+    & \cellcolor[HTML]{ F3926E } 431
+    & \cellcolor[HTML]{ FCB082 } 370
+    & \cellcolor[HTML]{ FFCE92 } 293
+    & \cellcolor[HTML]{ FCF0A7 } 196
+    & \cellcolor[HTML]{ FAF8AF } 171
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  9 - 10 & 
+    
+    \cellcolor[HTML]{ FEE09B } 240
+    & \cellcolor[HTML]{ FFC68F } 316
+    & \cellcolor[HTML]{ F9A77B } 389
+    & \cellcolor[HTML]{ EB7561 } 488
+    & \cellcolor[HTML]{ EC7B63 } 478
+    & \cellcolor[HTML]{ EA7460 } 491
+    & \cellcolor[HTML]{ E86E5E } 502
+    & \cellcolor[HTML]{ E9725F } 495
+    & \cellcolor[HTML]{ F59972 } 418
+    & \cellcolor[HTML]{ FFBD8C } 340
+    & \cellcolor[HTML]{ FEE29D } 235
+    & \cellcolor[HTML]{ FDEAA2 } 213
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  10 - 11 & 
+    
+    \cellcolor[HTML]{ FFD495 } 274
+    & \cellcolor[HTML]{ FCB284 } 364
+    & \cellcolor[HTML]{ F28E6C } 439
+    & \cellcolor[HTML]{ E6685C } 513
+    & \cellcolor[HTML]{ EA7460 } 490
+    & \cellcolor[HTML]{ E86C5D } 506
+    & \cellcolor[HTML]{ E7695D } 511
+    & \cellcolor[HTML]{ e6675c } 515
+    & \cellcolor[HTML]{ F18969 } 450
+    & \cellcolor[HTML]{ FBAC7F } 377
+    & \cellcolor[HTML]{ FFD796 } 267
+    & \cellcolor[HTML]{ FFDE9A } 245
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  11 - 12 & 
+    
+    \cellcolor[HTML]{ FFD092 } 287
+    & \cellcolor[HTML]{ FAA87C } 385
+    & \cellcolor[HTML]{ EF8366 } 461
+    & \cellcolor[HTML]{ E76B5D } 507
+    & \cellcolor[HTML]{ EB7761 } 484
+    & \cellcolor[HTML]{ EB7661 } 487
+    & \cellcolor[HTML]{ E86E5E } 502
+    & \cellcolor[HTML]{ E76A5D } 510
+    & \cellcolor[HTML]{ F08768 } 454
+    & \cellcolor[HTML]{ F8A479 } 395
+    & \cellcolor[HTML]{ FFD796 } 267
+    & \cellcolor[HTML]{ FFDB98 } 254
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  12 - 13 & 
+    
+    \cellcolor[HTML]{ FFD897 } 262
+    & \cellcolor[HTML]{ FBAC7F } 377
+    & \cellcolor[HTML]{ F18B6A } 445
+    & \cellcolor[HTML]{ EE8165 } 465
+    & \cellcolor[HTML]{ F28C6B } 443
+    & \cellcolor[HTML]{ F18969 } 450
+    & \cellcolor[HTML]{ ED7C63 } 475
+    & \cellcolor[HTML]{ ED7D64 } 473
+    & \cellcolor[HTML]{ F69B73 } 413
+    & \cellcolor[HTML]{ FEB989 } 350
+    & \cellcolor[HTML]{ FEE39E } 231
+    & \cellcolor[HTML]{ FDE7A0 } 220
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  13 - 14 & 
+    
+    \cellcolor[HTML]{ FCEFA6 } 199
+    & \cellcolor[HTML]{ FFCD91 } 296
+    & \cellcolor[HTML]{ FEB788 } 354
+    & \cellcolor[HTML]{ F9A57A } 392
+    & \cellcolor[HTML]{ FBAC7F } 377
+    & \cellcolor[HTML]{ F9A67A } 391
+    & \cellcolor[HTML]{ F69C74 } 411
+    & \cellcolor[HTML]{ F79F76 } 405
+    & \cellcolor[HTML]{ FFBF8D } 335
+    & \cellcolor[HTML]{ FFD796 } 265
+    & \cellcolor[HTML]{ F2F5B1 } 158
+    & \cellcolor[HTML]{ F1F5B1 } 157
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  14 - 15 & 
+    
+    \cellcolor[HTML]{ CDE4BD } 82
+    & \cellcolor[HTML]{ FCEEA6 } 200
+    & \cellcolor[HTML]{ FFDA98 } 258
+    & \cellcolor[HTML]{ FFCB91 } 299
+    & \cellcolor[HTML]{ FFCA90 } 304
+    & \cellcolor[HTML]{ FFC48E } 320
+    & \cellcolor[HTML]{ FFBF8D } 334
+    & \cellcolor[HTML]{ FFC68F } 316
+    & \cellcolor[HTML]{ FEE09B } 241
+    & \cellcolor[HTML]{ F0F5B2 } 156
+    & \cellcolor[HTML]{ C4DCC0 } 52
+    & \cellcolor[HTML]{ C2D9C1 } 41
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  15 - 16 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ C9E1BF } 69
+    & \cellcolor[HTML]{ ECF3B3 } 148
+    & \cellcolor[HTML]{ FCF1A9 } 191
+    & \cellcolor[HTML]{ FCECA5 } 205
+    & \cellcolor[HTML]{ FDE7A0 } 220
+    & \cellcolor[HTML]{ FEE19C } 237
+    & \cellcolor[HTML]{ FDEAA2 } 213
+    & \cellcolor[HTML]{ E4F0B5 } 133
+    & \cellcolor[HTML]{ BFD3C1 } 23
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  16 - 17 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ BED2C1 } 19
+    & \cellcolor[HTML]{ C8E0BF } 67
+    & \cellcolor[HTML]{ D4E8BB } 99
+    & \cellcolor[HTML]{ DCEDB8 } 118
+    & \cellcolor[HTML]{ E0EFB7 } 125
+    & \cellcolor[HTML]{ D0E6BC } 89
+    & \cellcolor[HTML]{ BED1C1 } 17
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  17 - 18 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ BCCDC1 } 4
+    & \cellcolor[HTML]{ BED3C1 } 21
+    & \cellcolor[HTML]{ C1D8C1 } 39
+    & \cellcolor[HTML]{ C1D7C1 } 37
+    & \cellcolor[HTML]{ BDCFC1 } 9
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  18 - 19 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ BCCDC1 } 4
+    & \cellcolor[HTML]{ BCCDC1 } 3
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  19 - 20 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  20 - 21 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  21 - 22 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  22 - 23 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline  23 - 24 & 
+    
+    \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+    & \cellcolor[HTML]{ FFFFFF } -
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+    \rowcolor[HTML]{E7E7E7 }
+    \textbf{Sum}
+     & \textbf{1606}  & \textbf{2425}  & \textbf{3165}  & \textbf{3933}  & \textbf{4040}  & \textbf{4185}  & \textbf{4257}  & \textbf{4062}  & \textbf{3298}  & \textbf{2510}  & \textbf{1548}  & \textbf{1377} 
+    \\
+    
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+%     \end{footnotesize} 
+%    \end{longtable}  }  % end of \scriptsize 
+%    \end{longtabu}  }  % end of \scriptsize 
+%    \end{longtabu}
+     \end{longtabu} 
+     }  % end of \scriptsize 
+%     \end{footnotesize} 
+%    \end{footnotesize}
+%    \end{tabular}  }  % end of \scriptsize 
+%    \end{tabularx}  }  % end of \scriptsize 
+%    \end{tabular*}  }  % end of \scriptsize 
+%} % end of \resizebox
+%\end{table}
+
+% END of the table  Specific photovoltaic power output – hourly averages [Wh/kWp] 
+\newpage\Needspace{5\baselineskip}
+\section{ PV performance: Energy conversion and system losses }
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\paragraph{} Theoretical yearly specific estimate of solar electricity production by a photovoltaic system without considering the long-term ageing and performance degradation of PV modules and other system components. Long-term average performance ratio (PR) is calculated for a start-up production of a PV system.% BEGIN of the table  Energy conversion and related losses 
+
+
+%  %TODO - this does go well with minipage, but messes up with table numbering!
+%%\captionof{table}{ Energy conversion and related losses }
+%%\caption{ Energy conversion and related losses }
+%%\label{ Energy-conversion and related losses }
+%
+
+%\resizebox{\textwidth}{*} {
+
+ {\footnotesize 
+
+%    \setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+%    \setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+%    \setlength\LTright{0pt} % default: \fill
+%    \begin{longtabu} to \textwidth{ X[5,L]X[1.5,R]X[1,R]X[1.5,R]X[1,R]X[1,R]X[1,R]X[1,R] }
+     \begin{longtabu} to \textwidth{ X[5,L]X[1.5,R]X[1,R]X[1.5,R]X[1,R]X[1,R]X[1,R]X[1,R] }
+    
+%    \begin{footnotesize}
+%     \begin{footnotesize} 
+%    \small
+%    \begin{tabular} { X[5,L]X[1.5,R]X[1,R]X[1.5,R]X[1,R]X[1,R]X[1,R]X[1,R] }
+%    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill} } X[5,L]X[1.5,R]X[1,R]X[1.5,R]X[1,R]X[1,R]X[1,R]X[1,R] }
+%    \begin{tabular*}{\textwidth} X[5,L]X[1.5,R]X[1,R]X[1.5,R]X[1,R]X[1,R]X[1,R]X[1,R] }
+%    \begin{tabularx}{\linewidth} { X[5,L]X[1.5,R]X[1,R]X[1.5,R]X[1,R]X[1,R]X[1,R]X[1,R] }
+    
+%    \captionof{table}{ Energy conversion and related losses }
+    \caption{ Energy conversion and related losses }
+    %\label{ Energy-conversion and related losses }
+    
+
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+
+    
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{}&  \textbf{Energy input GTI}&  \textbf{Energy loss}&  \textbf{Energy output PVOUT specific}&  \textbf{Energy loss}&  \textbf{Energy loss}&  \textbf{PR partial}&  \textbf{PR cumulative} \\ %[-5pt]
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{{\color[HTML]{656565} {\normalfont }}}&  \textbf{{\color[HTML]{656565} {\normalfont kWh/m\textsuperscript{2}}}}&  \textbf{{\color[HTML]{656565} {\normalfont kWh/m\textsuperscript{2}}}}&  \textbf{{\color[HTML]{656565} {\normalfont kWh/kWp}}}&  \textbf{{\color[HTML]{656565} {\normalfont kWh/kWp}}}&  \textbf{{\color[HTML]{656565} {\normalfont \%}}}&  \textbf{{\color[HTML]{656565} {\normalfont \%}}}&  \textbf{{\color[HTML]{656565} {\normalfont \%}}} \\ %[-5pt]
+      \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \endhead
+    
+
+    
+    \cellcolor[HTML]{ E7E7E7 }\textbf{Global tilted irradiation (theoretical) }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{1384 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{ }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{ }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{ }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{ }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{100.0 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{100.0 }
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Terrain shading
+    &  1374
+    &  -10
+    &  
+    &  
+    &  -0.7
+    &  99.3
+    &  99.3
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Angular reflectivity
+    &  1331
+    &  -43
+    &  
+    &  
+    &  -3.1
+    &  96.9
+    &  96.2
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Snow
+    &  1331
+    &  0
+    &  
+    &  
+    &  0.0
+    &  100.0
+    &  96.2
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Dirt, dust and soiling
+    &  1271
+    &  -60
+    &  
+    &  
+    &  -4.3
+    &  95.7
+    &  91.8
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \cellcolor[HTML]{ E7E7E7 }\textbf{Global tilted irradiation (effective) }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{1271 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{-113 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{ }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{ }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{-8.2 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{- }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{91.8 }
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Conversion of solar irradiance to DC in the modules
+    &  
+    &  
+    &  1225
+    &  -46
+    &  -3.3
+    &  96.7
+    &  88.6
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Electrical losses due to inter-row shading
+    &  
+    &  
+    &  1225
+    &  0
+    &  0.0
+    &  100.0
+    &  88.6
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Power tolerance of PV modules
+    &  
+    &  
+    &  1225
+    &  0
+    &  0.0
+    &  100.0
+    &  88.6
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Mismatch and cabling in DC section
+    &  
+    &  
+    &  1203
+    &  -22
+    &  -1.6
+    &  98.4
+    &  87.0
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Inverters (DC/AC) conversion
+    &  
+    &  
+    &  1145
+    &  -59
+    &  -4.2
+    &  95.8
+    &  82.7
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Transformer and AC cabling losses
+    &  
+    &  
+    &  1142
+    &  -2
+    &  -0.2
+    &  99.8
+    &  82.6
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \cellcolor[HTML]{ E7E7E7 }\textbf{Total system performance (initial) }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{ }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{ }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{1142 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{-241 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{-17.4 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{- }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{82.6 }
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Technical availability
+    &  
+    &  
+    &  1108
+    &  -34
+    &  -2.5
+    &  97.5
+    &  80.1
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \cellcolor[HTML]{ E7E7E7 }\textbf{Total system performance (initial) considering technical availability }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{ }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{ }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{1108 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{-276 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{-19.9 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{- }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{80.1 }
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     
+    &  
+    &  
+    &  
+    &  
+    &  
+    &  
+    &  
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+    \rowcolor[HTML]{E7E7E7 }
+    \textbf{Capacity factor}
+     & \textbf{}  & \textbf{}  & \textbf{12.6\%}  & \textbf{}  & \textbf{}  & \textbf{}  & \textbf{} 
+    \\
+    
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+%     \end{footnotesize} 
+%    \end{longtable}  }  % end of \scriptsize 
+%    \end{longtabu}  }  % end of \scriptsize 
+%    \end{longtabu}
+     \end{longtabu} 
+     }  % end of \scriptsize 
+%     \end{footnotesize} 
+%    \end{footnotesize}
+%    \end{tabular}  }  % end of \scriptsize 
+%    \end{tabularx}  }  % end of \scriptsize 
+%    \end{tabular*}  }  % end of \scriptsize 
+%} % end of \resizebox
+%\end{table}
+
+% END of the table  Energy conversion and related losses 
+%\vspace*{-7mm}
+\begin{figure}[H]  % inspired by: https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side\centering
+    
+    \begin{figure}[H]
+    \vspace*{-5mm}
+    \caption{ Loss diagram }
+%    \captionof{figure}{ Loss diagram }
+    \includegraphics[width=\linewidth]{/app/pics/a.png}
+    \end{figure}
+    
+\end{figure}\paragraph{} Diagram shows theoretical losses due to energy conversion in the PV power system\newpage\Needspace{5\baselineskip}
+\section{ PV performance: Lifetime performance }
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\paragraph{} Yearly average estimate of solar electricity production by a photovoltaic system. This value considers the PV system configuration and also takes into account the decline of system performance due to ageing and the performance degradation of PV modules and other components. The concept of specific PV power output is useful for comparing different sites or PV system configurations. Performance ratio (PR) shows the average efficiency over the lifetime of a PV system, taking into account the reduction in system performance.% BEGIN of the table  PV electricity production over lifetime 
+
+
+%  %TODO - this does go well with minipage, but messes up with table numbering!
+%%\captionof{table}{ PV electricity production over lifetime }
+%%\caption{ PV electricity production over lifetime }
+%%\label{ PV-electricity production over lifetime }
+%
+
+%\resizebox{\textwidth}{*} {
+
+ {\footnotesize 
+
+%    \setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+%    \setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+%    \setlength\LTright{0pt} % default: \fill
+%    \begin{longtabu} to \textwidth{ X[1,L]X[1,R]X[1,R]X[1,R]X[1,R] }
+     \begin{longtabu} to \textwidth{ X[1,L]X[1,R]X[1,R]X[1,R]X[1,R] }
+    
+%    \begin{footnotesize}
+%     \begin{footnotesize} 
+%    \small
+%    \begin{tabular} { X[1,L]X[1,R]X[1,R]X[1,R]X[1,R] }
+%    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill} } X[1,L]X[1,R]X[1,R]X[1,R]X[1,R] }
+%    \begin{tabular*}{\textwidth} X[1,L]X[1,R]X[1,R]X[1,R]X[1,R] }
+%    \begin{tabularx}{\linewidth} { X[1,L]X[1,R]X[1,R]X[1,R]X[1,R] }
+    
+%    \captionof{table}{ PV electricity production over lifetime }
+    \caption{ PV electricity production over lifetime }
+    %\label{ PV-electricity production over lifetime }
+    
+
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+
+    
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{End of year}&  \textbf{Degradation rate}&  \textbf{PVOUT\_specific}&  \textbf{PVOUT\_total}&  \textbf{PR} \\ %[-5pt]
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{{\color[HTML]{656565} {\normalfont }}}&  \textbf{{\color[HTML]{656565} {\normalfont \%}}}&  \textbf{{\color[HTML]{656565} {\normalfont kWh/kWp}}}&  \textbf{{\color[HTML]{656565} {\normalfont MWh}}}&  \textbf{{\color[HTML]{656565} {\normalfont \%}}} \\ %[-5pt]
+      \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \endhead
+    
+
+    
+    \cellcolor[HTML]{ E7E7E7 }\textbf{Theoretical }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{- }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{1108 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{- }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{80.7 }
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     1
+    &  0.8
+    &  1099
+    &  329.781
+    &  80.0
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     2
+    &  0.5
+    &  1094
+    &  328.132
+    &  79.6
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     3
+    &  0.5
+    &  1088
+    &  326.491
+    &  79.2
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     4
+    &  0.5
+    &  1083
+    &  324.859
+    &  78.8
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     5
+    &  0.5
+    &  1077
+    &  323.235
+    &  78.4
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     6
+    &  0.5
+    &  1072
+    &  321.618
+    &  78.0
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     7
+    &  0.5
+    &  1067
+    &  320.010
+    &  77.7
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     8
+    &  0.5
+    &  1061
+    &  318.410
+    &  77.3
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     9
+    &  0.5
+    &  1056
+    &  316.818
+    &  76.9
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     10
+    &  0.5
+    &  1051
+    &  315.234
+    &  76.5
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     11
+    &  0.5
+    &  1046
+    &  313.658
+    &  76.1
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     12
+    &  0.5
+    &  1040
+    &  312.090
+    &  75.7
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     13
+    &  0.5
+    &  1035
+    &  310.529
+    &  75.4
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     14
+    &  0.5
+    &  1030
+    &  308.977
+    &  75.0
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     15
+    &  0.5
+    &  1025
+    &  307.432
+    &  74.6
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     16
+    &  0.5
+    &  1020
+    &  305.895
+    &  74.2
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     17
+    &  0.5
+    &  1015
+    &  304.365
+    &  73.9
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     18
+    &  0.5
+    &  1009
+    &  302.843
+    &  73.5
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     19
+    &  0.5
+    &  1004
+    &  301.329
+    &  73.1
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     20
+    &  0.5
+    &  999
+    &  299.822
+    &  72.8
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     21
+    &  0.5
+    &  994
+    &  298.323
+    &  72.4
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     22
+    &  0.5
+    &  989
+    &  296.832
+    &  72.0
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     23
+    &  0.5
+    &  984
+    &  295.348
+    &  71.7
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     24
+    &  0.5
+    &  980
+    &  293.871
+    &  71.3
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     25
+    &  0.5
+    &  975
+    &  292.401
+    &  71.0
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \cellcolor[HTML]{ E7E7E7 }\textbf{Average }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{0.5 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{75 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{310.732 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{75.4 }
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \cellcolor[HTML]{ E7E7E7 }\textbf{Cumulative }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{12.8 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{- }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{7768.303 }
+    & \cellcolor[HTML]{ E7E7E7 }\textbf{- }
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+%     \end{footnotesize} 
+%    \end{longtable}  }  % end of \scriptsize 
+%    \end{longtabu}  }  % end of \scriptsize 
+%    \end{longtabu}
+     \end{longtabu} 
+     }  % end of \scriptsize 
+%     \end{footnotesize} 
+%    \end{footnotesize}
+%    \end{tabular}  }  % end of \scriptsize 
+%    \end{tabularx}  }  % end of \scriptsize 
+%    \end{tabular*}  }  % end of \scriptsize 
+%} % end of \resizebox
+%\end{table}
+
+% END of the table  PV electricity production over lifetime 
+\newpage\Needspace{5\baselineskip}
+\section{ Acronyms and glossary }
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+% BEGIN of the table 
+
+
+%
+
+%\resizebox{\textwidth}{*} {
+
+ {\footnotesize 
+
+%    \setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+%    \setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+%    \setlength\LTright{0pt} % default: \fill
+%    \begin{longtabu} to \textwidth{ X[1.5,L]X[2,L]X[1,L]X[7,L] }
+     \begin{longtabu} to \textwidth{ X[1.5,L]X[2,L]X[1,L]X[7,L] }
+    
+%    \begin{footnotesize}
+%     \begin{footnotesize} 
+%    \small
+%    \begin{tabular} { X[1.5,L]X[2,L]X[1,L]X[7,L] }
+%    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill} } X[1.5,L]X[2,L]X[1,L]X[7,L] }
+%    \begin{tabular*}{\textwidth} X[1.5,L]X[2,L]X[1,L]X[7,L] }
+%    \begin{tabularx}{\linewidth} { X[1.5,L]X[2,L]X[1,L]X[7,L] }
+    
+
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+
+    
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{Acronym}&  \textbf{Full name}&  \textbf{Unit}&  \textbf{Explanation} \\ %[-5pt]
+      \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \endhead
+    
+
+    
+     CDD
+    &  Cooling degree days
+    &  degree days
+    &  Quantifies energy demand needed to cool a building. Number of cooling degrees in a day is calculated as the difference between 18°C and the average daily temperature. Yearly and monthly values are aggregated from daily values. Calculated by Solargis from air temperature data
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     D2G
+    &  Ratio of diffuse to global irradiation
+    &  
+    &  Ratio of diffuse horizontal irradiation and global horizontal irradiation (DIF/GHI). Average yearly and monthly values calculated by Solargis
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     DIF
+    &  Diffuse horizontal irradiation
+    &  kWh/m\textsuperscript{2}
+    &  Average yearly, monthly or daily sum of diffuse horizontal irradiation (© 2018 Solargis)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     DNI
+    &  Direct normal irradiation
+    &  kWh/m\textsuperscript{2}
+    &  Average yearly, monthly or daily sum of direct normal irradiation (© 2018 Solargis)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     ELE
+    &  Elevation
+    &  m a.s.l.
+    &  Terrain elevation processed and integrated from SRTM-3 data and related data products (© 2018 SRTM team)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     GHI
+    &  Global horizontal irradiation
+    &  kWh/m\textsuperscript{2}
+    &  Average annual, monthly or daily sum of global horizontal irradiation (© 2018 Solargis)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     GTI
+    &  Global tilted irradiation
+    &  kWh/m\textsuperscript{2}
+    &  Average annual, monthly or daily sum of global tilted irradiation (© 2018 Solargis)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     GTI\_opta
+    &  Global tilted irradiation at optimum angle
+    &  kWh/m\textsuperscript{2}
+    &  Average annual, monthly or daily sum of global tilted irradiation for PV modules fix-mounted at optimum angle (© 2018 Solargis)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     GTI\_theoretical
+    &  Theoretical GTI
+    &  kWh/m\textsuperscript{2}
+    &  Average annual, monthly or daily sum of global tilted irradiation without consideration of terrain shading (© 2018 Solargis)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     HDD
+    &  Heating degree days
+    &  degree days
+    &  Quantifies energy demand needed to heat a building. Number of heating degrees in a day is calculated as the difference between 18°C and the average daily temperature. Yearly and monthly values are aggregated from daily values. Calculated by Solargis from air temperature data
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     LANDC
+    &  Land cover
+    &  
+    &  Indicates the prevailing type of material at the surface (grass, forest, urban area, etc). Data is derived from Land Cover CCI, v2.0.7 dataset (© ESA Climate Change Initiative - Land Cover led by UCLouvain (2017)) and reflects the status in 2015. The original classification simplified by Solargis
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     POPUL
+    &  Population density
+    &  inh./km\textsuperscript{2}
+    &  Population density data derived from Gridded Population of the World, Version 4, GPWv4 (© 1997-2018 The Trustees of Columbia University in the City of New York). Population Density Adjusted to Match 2015 Revision of UN WPP Country
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     PR
+    &  Performance ratio
+    &  \%
+    &  Ratio between global tilted irradiation received by the surface of a PV array and specific AC electricity output of a PV system (PVOUTspecific/GTI)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     PREC
+    &  Precipitation (rainfall)
+    &  mm
+    &  Average yearly and monthly sums of precipitation derived from Global Precipitation Climatology database (© 2018 DWD)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     PV
+    &  Photovoltaic
+    &  
+    &   
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     PVOUT\_specific
+    &  Specific photovoltaic power output
+    &  kWh/kWp
+    &  Yearly and monthly average values of photovoltaic electricity (AC) delivered by a PV system and normalized to 1 kWp of installed capacity (© 2018 Solargis)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     PVOUT\_total
+    &  Total photovoltaic power output
+    &  GWh, MWh, kWh
+    &  Yearly and monthly average values of photovoltaic electricity (AC) delivered by the total installed capacity of a PV system (© 2018 Solargis)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     PWAT
+    &  Precipitable water
+    &  kg/m\textsuperscript{2}
+    &  Precipitable water is the depth of water in a column of the atmosphere, if all the water in that column were precipitated as rain. It indicates the amount of moisture above ground. Calculated from outputs of CFSR and CFSv2 models (© 2018 NOAA)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     RH
+    &  Relative humidity
+    &  \%
+    &  Average yearly or monthly relative humidity at 2 m above ground. Calculated from outputs of MERRA-2 and CFSv2 models (© 2018 NASA and NOAA)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     SNOWD
+    &  Snow days
+    &  days
+    &  Water equivalent of snow. Snow days are calculated as days with snow water depth equivalent to or higher than 5 mm. Calculated from outputs of CFSR and CFSv2 models (© 2018 NOAA)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     TEMP
+    &  Air temperature
+    &  °C
+    &  Average yearly, monthly and daily air temperature at 2 m above ground. Calculated from outputs of MERRA-2 and CFSv2 models (© 2018 NOAA and NASA)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     WS
+    &  Wind speed
+    &  m/s
+    &  Average yearly, monthly and daily wind speed at 10 m above ground. Calculated from outputs of MERRA-2 and CFSv2 models (© 2018 NOAA and NASA)
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+%     \end{footnotesize} 
+%    \end{longtable}  }  % end of \scriptsize 
+%    \end{longtabu}  }  % end of \scriptsize 
+%    \end{longtabu}
+     \end{longtabu} 
+     }  % end of \scriptsize 
+%     \end{footnotesize} 
+%    \end{footnotesize}
+%    \end{tabular}  }  % end of \scriptsize 
+%    \end{tabularx}  }  % end of \scriptsize 
+%    \end{tabular*}  }  % end of \scriptsize 
+%} % end of \resizebox
+%\end{table}
+
+% END of the table 
+\newpage\Needspace{5\baselineskip}
+\section{ Metadata }
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\paragraph{} This report is based on high-resolution solar and meteorological database developed and operated by Solargis. The data parameters presented in this report are computed by Solargis models and algorithms. The data used as inputs to the models come from different sources. The data characteristics are explained below.\begin{itemize}[noitemsep]
+\item Time representation: 1.1.1994 to 31.12.2018 (25 calendar years)\item Time step: Monthly and yearly long-term statistics\item The estimations assume a year having 365 days\item Solargis database version v2.5
+\end{itemize}% BEGIN of the table  Data inputs to Solargis models and algorithms 
+
+
+%  %TODO - this does go well with minipage, but messes up with table numbering!
+%%\captionof{table}{ Data inputs to Solargis models and algorithms }
+%%\caption{ Data inputs to Solargis models and algorithms }
+%%\label{ Data-inputs to Solargis models and algorithms }
+%
+
+%\resizebox{\textwidth}{*} {
+
+ {\footnotesize 
+
+%    \setlength\LTcapwidth{\textwidth} % default: 4in (rather less than \textwidth...)
+%    \setlength\LTleft{0pt}  % default: \parindent % https://tex.stackexchange.com/questions/61564/longtable-spanning-textwidth
+%    \setlength\LTright{0pt} % default: \fill
+%    \begin{longtabu} to \textwidth{ X[1,L]X[3.3,L]X[1.2,L]X[1,L] }
+     \begin{longtabu} to \textwidth{ X[1,L]X[3.3,L]X[1.2,L]X[1,L] }
+    
+%    \begin{footnotesize}
+%     \begin{footnotesize} 
+%    \small
+%    \begin{tabular} { X[1,L]X[3.3,L]X[1.2,L]X[1,L] }
+%    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill} } X[1,L]X[3.3,L]X[1.2,L]X[1,L] }
+%    \begin{tabular*}{\textwidth} X[1,L]X[3.3,L]X[1.2,L]X[1,L] }
+%    \begin{tabularx}{\linewidth} { X[1,L]X[3.3,L]X[1.2,L]X[1,L] }
+    
+%    \captionof{table}{ Data inputs to Solargis models and algorithms }
+    \caption{ Data inputs to Solargis models and algorithms }
+    %\label{ Data-inputs to Solargis models and algorithms }
+    
+
+     \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+
+    
+    
+    \rowcolor[HTML]{ E7E7E7 }
+     \textbf{Group of data}&  \textbf{Source of data inputs}&  \textbf{Organization}&  \textbf{Solargis method} \\ %[-5pt]
+      \arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    \endhead
+    
+
+    
+     GHI, DNI, DIF, GTI, D2G
+    &  Meteosat MFG and MSG satellites (PRIME) \newline Aerosols from MERRA-2 and MACC-II/CAMS models \newline Water vapour from CSFR and GFS models \newline ELE
+    &  EUMETSAT \newline NASA, ECMWF \newline NOAA \newline SRTM
+    &  Solar model
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     TEMP, RH, WS
+    &  MERRA-2 and CSFv2 models
+    &  NASA, NOAA
+    &  Data processing
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     SNOWD
+    &  CFSR and CFSv2 models
+    &  NOAA
+    &  Data processing
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     PREC
+    &  GPCC database
+    &  DWD
+    &  Data processing
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     PWAT
+    &  CFSR and CFSv2 databases
+    &  NOAA
+    &  Data processing
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     Albedo
+    &  MODIS and ERA-5 databases
+    &  NASA, ECMWF
+    &  Data merging, cleaning, processing
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     LAND\_C
+    &  Land Cover, CCI v2.0.7
+    &  ESA CCI
+    &  Post-processing
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     POPUL
+    &  Gridded Population of the World, Version 4 (GPWv4)
+    &  CIESIN
+    &  Data processing
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     ELE, SLO, AZI
+    &  SRTM-3
+    &  SRTM
+    &  Data merging, cleaning, processing
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     PVOUT, OPTA
+    &  GTI, TEMP, ELE
+    &  Solargis
+    &  PV simulation model
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+     HDD, CDD
+    &  TEMP
+    &  Solargis
+    &  Data processing
+     \\\arrayrulecolor[HTML]{ D5D5D5 }\hline 
+    
+%     \end{footnotesize} 
+%    \end{longtable}  }  % end of \scriptsize 
+%    \end{longtabu}  }  % end of \scriptsize 
+%    \end{longtabu}
+     \end{longtabu} 
+     }  % end of \scriptsize 
+%     \end{footnotesize} 
+%    \end{footnotesize}
+%    \end{tabular}  }  % end of \scriptsize 
+%    \end{tabularx}  }  % end of \scriptsize 
+%    \end{tabular*}  }  % end of \scriptsize 
+%} % end of \resizebox
+%\end{table}
+
+% END of the table  Data inputs to Solargis models and algorithms 
+\paragraph{}\textbf{Documentation:}\begin{description}[noitemsep]
+\item Data uncertainty: \url{https://solargis.com/support/accuracy-and-comparisons/combined-uncertainty/}\item Methodology: \url{https://solargis.com/support/methodology/solar-radiation-modeling/}\item PV energy simulation: \url{https://solargis.com/support/methodology/pv-energy-modeling/}
+\end{description}\newpage\Needspace{5\baselineskip}
+\section{ Disclaimer and legal information }
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\paragraph{} Considering the uncertainty of data and calculations, Solargis s.r.o. does not guarantee the accuracy of estimates. The maximum possible has been done for the assessment of weather parameters and preliminary assessment of the photovoltaic electricity production based on the best available data, software and knowledge. Solargis s.r.o. shall not be liable for any direct, incidental, consequential, indirect or punitive damages arising or alleged to have arisen out of use of the provided report.\paragraph{} This report shows solar power estimation in the start-up phase of a PV system. The estimates are accurate enough for small and medium-size PV systems. For sun-tracking simulations, only theoretical options are shown without considering backtracking and shading. For large projects planning and financing, more information is needed: 1. Statistical distribution and uncertainty of solar radiation 2. Detailed specification of a PV system 3. Inter-annual variability and P90 uncertainty of PV production 4. Lifetime energy production considering performance degradation of PV components.\begin{description}[noitemsep]
+\item More information about full PV yield assessment can be found at:\item \url{https://solargis.com/products/pv-yield-assessment-study/overview/}
+\end{description}\paragraph{} This report is copyright to © 2019 Solargis s.r.o., all rights reserved.\paragraph{} Solargis® is a trade mark of Solargis s.r.o.\begin{description}[noitemsep]
+\item See full text of GENERAL CONTRACTUAL TERMS TO THE PAID SERVICES at:\item \url{https://solargis.com/legal/general-contractual-terms/}
+\end{description}\paragraph{}\textbf{Validation of authenticity}\begin{description}[noitemsep]
+\item This PDF report is electronically signed by Solargis s.r.o., the authenticity can be verified at:\item \url{https://solargis.info/embedded/pdfverify.html}
+\end{description}\paragraph{}\textbf{Service provider}\begin{description}[noitemsep]
+\item Solargis s.r.o., Mýtna 48, 811 07 Bratislava, Slovakia\item Registration ID: 45 354 766\item VAT Number: SK2022962766\item Telephone: +421 2 4319 1708\item Email: \href{mailto:contact@solargis.com}{contact@solargis.com}\item URL: \url{solargis.com}
+\end{description}
+
+%
+
+}  % end \small
+
+%\end{CJK}
 \end{document}
+
+
