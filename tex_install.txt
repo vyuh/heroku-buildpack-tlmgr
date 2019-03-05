@@ -1,1 +1,1 @@
-geometry graphics keyval collection-latex float booktabs fontspec lastpage datetime etoolbox fmtcount xkeyval enumitem xcolor multirow needspace tabu varwidth titlesec polyglossia caption koma-script
+ graphics keyval collection-latex float booktabs fontspec lastpage datetime etoolbox fmtcount xkeyval enumitem xcolor multirow needspace tabu varwidth titlesec polyglossia caption koma-script geometry 
