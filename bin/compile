@@ -109,7 +109,8 @@ cp $BUILD_DIR/$PROFILE $DESTDIR/tlpkg/install.profile
 echo "*********************"
 echo "TeXLive environment installation and packaging complete."
 echo "Distribution: $DESTDIR"
-echo "Don't forget to add $BIN_DIR to your PATH."
+echo "Don't forget to add $DESTDIR/bin/$PLATFORM/ to your PATH."
+echo "Heroku buildpack binaries dir $BIN_DIR is going to be disposed."
 
 # test the xelatex
 set +e  # xelatex gives non-zero exitstatus even because of warnings
