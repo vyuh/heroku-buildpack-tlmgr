@@ -89,7 +89,7 @@ tar xzf $INSTALLER_ARCHIVE
 # Set the preferred TeXLive repo(s)
 echo "Setting the preffered CTAN repo."
 if [ -f $BUILD_DIR/tex_repos.txt ]; then
-    read -r line
+    read -r line <$BUILD_DIR/tex_repos.txt
     echo "Using custom repo from tex_repos.txt: $line"
     $DESTDIR/bin/$PLATFORM/tlmgr option repository set $line
 else
@@ -100,7 +100,7 @@ echo "Update CTAN pckgs list."
 $DESTDIR/bin/$PLATFORM/tlmgr update --list
 
 # Add custom packages
-echo "Going to install required tex pckgs"
+echo "Going to install required tex pckgs."
 while read -r line; do
     $DESTDIR/bin/$PLATFORM/tlmgr install $line
 done < $BUILD_DIR/tex_install.txt
