@@ -128,7 +128,7 @@ cp $BUILD_DIR/$PROFILE $DESTDIR/tlpkg/install.profile
 echo "exporting PATH "
 PROFILE_PATH="$BUILD_DIR/.profile.d/texlive-path-parts.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="$PATH:$BUILD_DIR/buildpack/bin/x86_64-linux"' >> $PROFILE_PATH
+echo 'export PATH="$PATH:/app/buildpack/bin/x86_64-linux"' >> $PROFILE_PATH
 
 # final message
 echo "*********************"
