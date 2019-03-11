@@ -111,7 +111,7 @@ if [ -f $BUILD_DIR/tex_uninstall.txt ]; then
     done < $BUILD_DIR/tex_uninstall.txt
 else
     echo "No package to uninstall (empty tex_uninstall.txt)."
-fie
+fi
 
 # copy test .tex file for custom tests
 cp $BIN_DIR/../test.tex $BUILD_DIR/buildpack/bin/x86_64-linux/
