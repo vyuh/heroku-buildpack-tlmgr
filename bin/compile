@@ -74,8 +74,8 @@ tlpdbopt_post_code 1
 
 EOF
 
-echo "Now we are here $(pwd); BIN_DIR is this: $BIN_DIR ."
-ls $BIN_DIR
+# echo "Now we are here $(pwd); BIN_DIR is this: $BIN_DIR ."
+# ls $BIN_DIR
 
 # download installer archive, open and run installer
 rm -f $INSTALLER_ARCHIVE  # TODO uncomment
@@ -114,13 +114,13 @@ else
 fi
 
 # copy test .tex file for custom tests
-cp $BIN_DIR/../test.tex $BUILD_DIR/buildpack/bin/x86_64-linux/
-mkdir -p /app/pics/
-cp $BIN_DIR/../a.png /app/pics/
-echo "Content of /app/pics"
-ls /app/pics
-echo "we are here" 
-pwd
+# cp $BIN_DIR/../test.tex $BUILD_DIR/buildpack/bin/x86_64-linux/
+# mkdir -p /app/pics/
+# cp $BIN_DIR/../a.png /app/pics/
+# echo "Content of /app/pics"
+# ls /app/pics
+# echo "we are here" 
+# pwd
 # Keep a copy of our profile
 cp $BUILD_DIR/$PROFILE $DESTDIR/tlpkg/install.profile
 
@@ -138,8 +138,8 @@ echo "Don't forget to add $DESTDIR/bin/$PLATFORM/ to your PATH."
 echo "Heroku buildpack binaries dir $BIN_DIR is going to be disposed."
 
 # test the xelatex
-set +e  # xelatex gives non-zero exitstatus even because of warnings
-xelatex --shell-escape -synctex=1 -interaction=nonstopmode $BUILD_DIR/buildpack/bin/x86_64-linux/test.tex
+# set +e  # xelatex gives non-zero exitstatus even because of warnings
+# xelatex --shell-escape -synctex=1 -interaction=nonstopmode $BUILD_DIR/buildpack/bin/x86_64-linux/test.tex
 
 exit 0
 
