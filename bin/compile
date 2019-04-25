@@ -138,8 +138,8 @@ echo "Don't forget to add $DESTDIR/bin/$PLATFORM/ to your PATH."
 echo "Heroku buildpack binaries dir $BIN_DIR is going to be disposed."
 
 # test the xelatex
-# set +e  # xelatex gives non-zero exitstatus even because of warnings
-# xelatex --shell-escape -synctex=1 -interaction=nonstopmode $BUILD_DIR/TeXLive/bin/x86_64-linux/test.tex
+set +e  # xelatex gives non-zero exitstatus even because of warnings
+xelatex --shell-escape -synctex=1 -interaction=nonstopmode $BUILD_DIR/TeXLive/bin/x86_64-linux/test.tex
 
 exit 0
 
