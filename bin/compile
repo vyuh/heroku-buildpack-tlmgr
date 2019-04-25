@@ -12,14 +12,14 @@ BIN_DIR=$(cd $(dirname $0); pwd)  # absolute path
 cd $BUILD_DIR
 
 # add the XeLaTeX to the future PATH + update actual PATH
-echo ":$BUILD_DIR/buildpack/bin/x86_64-linux" >> $ENV_DIR/PATH
-echo ":$BUILD_DIR/buildpack/bin/x86_64-linux" >> $ENV_DIR/BIN_PATH
+echo ":$BUILD_DIR/TeXLive/bin/x86_64-linux" >> $ENV_DIR/PATH
+echo ":$BUILD_DIR/TeXLive/bin/x86_64-linux" >> $ENV_DIR/BIN_PATH
 export PATH="$PATH:$BUILD_DIR/buildpack/bin/x86_64-linux"
 
 INSTALLER_URL="http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz"
 INSTALLER_ARCHIVE="installer-tl-unix.tar.gz"
 PLATFORM=$(uname -m)-$(uname -s | tr A-Z a-z)
-DESTDIR=$BUILD_DIR/buildpack
+DESTDIR=$BUILD_DIR/TeXLive
 PROFILE="texlive.profile"
 
 
@@ -30,12 +30,12 @@ cat > $PROFILE <<EOF
 # It will NOT be updated and reflects only the
 # installation profile at installation time.
 selected_scheme scheme-custom
-TEXDIR $BUILD_DIR/buildpack
+TEXDIR $BUILD_DIR/TeXLive
 TEXMFCONFIG \$TEXMFSYSCONFIG
 TEXMFHOME \$TEXMFLOCAL
-TEXMFLOCAL $BUILD_DIR/buildpack/texmf-local
-TEXMFSYSCONFIG $BUILD_DIR/buildpack/texmf-config
-TEXMFSYSVAR $BUILD_DIR/buildpack/texmf-var
+TEXMFLOCAL $BUILD_DIR/TeXLive/texmf-local
+TEXMFSYSCONFIG $BUILD_DIR/TeXLive/texmf-config
+TEXMFSYSVAR $BUILD_DIR/TeXLive/texmf-var
 TEXMFVAR /tmp
 
 binary_x86_64-linux 1
@@ -114,7 +114,7 @@ else
 fi
 
 # copy test .tex file for custom tests
-# cp $BIN_DIR/../test.tex $BUILD_DIR/buildpack/bin/x86_64-linux/
+# cp $BIN_DIR/../test.tex $BUILD_DIR/TeXLive/bin/x86_64-linux/
 # mkdir -p /app/pics/
 # cp $BIN_DIR/../a.png /app/pics/
 # echo "Content of /app/pics"
@@ -128,7 +128,7 @@ cp $BUILD_DIR/$PROFILE $DESTDIR/tlpkg/install.profile
 echo "exporting PATH "
 PROFILE_PATH="$BUILD_DIR/.profile.d/texlive-path-parts.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="$PATH:/app/buildpack/bin/x86_64-linux"' >> $PROFILE_PATH
+echo 'export PATH="$PATH:/app/TeXLive/bin/x86_64-linux"' >> $PROFILE_PATH
 
 # final message
 echo "*********************"
@@ -139,7 +139,7 @@ echo "Heroku buildpack binaries dir $BIN_DIR is going to be disposed."
 
 # test the xelatex
 # set +e  # xelatex gives non-zero exitstatus even because of warnings
-# xelatex --shell-escape -synctex=1 -interaction=nonstopmode $BUILD_DIR/buildpack/bin/x86_64-linux/test.tex
+# xelatex --shell-escape -synctex=1 -interaction=nonstopmode $BUILD_DIR/TeXLive/bin/x86_64-linux/test.tex
 
 exit 0
 
