@@ -114,11 +114,11 @@ else
 fi
 
 # copy test .tex file for custom tests
-# cp $BIN_DIR/../test.tex $BUILD_DIR/TeXLive/bin/x86_64-linux/
-# mkdir -p /app/pics/
-# cp $BIN_DIR/../a.png /app/pics/
-# echo "Content of /app/pics"
-# ls /app/pics
+cp $BIN_DIR/../test.tex $BUILD_DIR/TeXLive/bin/x86_64-linux/
+mkdir -p /app/pics/
+cp $BIN_DIR/../a.png /app/pics/
+echo "Content of /app/pics"
+ls /app/pics
 # echo "we are here" 
 # pwd
 # Keep a copy of our profile
