@@ -78,8 +78,9 @@ EOF
 # ls $BIN_DIR
 
 # download installer archive, open and run installer
-rm -f $INSTALLER_ARCHIVE  # TODO uncomment
-curl -L $INSTALLER_URL > $INSTALLER_ARCHIVE  # TODO uncomment
+rm -f $INSTALLER_ARCHIVE
+curl -L $INSTALLER_URL > $INSTALLER_ARCHIVE
+rm -rf ./"install-tl-"*/  # remove possible offending old installer
 tar xzf $INSTALLER_ARCHIVE
 ./"install-tl-"*/install-tl -profile $PROFILE
 
