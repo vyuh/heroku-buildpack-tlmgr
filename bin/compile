@@ -113,14 +113,6 @@ else
     echo "No package to uninstall (empty tex_uninstall.txt)."
 fi
 
-# copy test .tex file for custom tests
-cp $BIN_DIR/../test.tex $BUILD_DIR/TeXLive/bin/x86_64-linux/
-mkdir -p /app/pics/
-cp $BIN_DIR/../a.png /app/pics/
-echo "Content of /app/pics"
-ls /app/pics
-# echo "we are here" 
-# pwd
 # Keep a copy of our profile
 cp $BUILD_DIR/$PROFILE $DESTDIR/tlpkg/install.profile
 
@@ -137,7 +129,16 @@ echo "Distribution: $DESTDIR"
 echo "Don't forget to add $DESTDIR/bin/$PLATFORM/ to your PATH."
 echo "Heroku buildpack binaries dir $BIN_DIR is going to be disposed."
 
-# test the xelatex
+# exit 0
+## TEST the xelatex
+# copy test .tex file for custom tests
+cp $BIN_DIR/../test.tex $BUILD_DIR/TeXLive/bin/x86_64-linux/
+mkdir -p /app/pics/
+cp $BIN_DIR/../a.png /app/pics/
+echo "Content of /app/pics"
+ls /app/pics
+# echo "we are here" 
+# pwd
 set +e  # xelatex gives non-zero exitstatus even because of warnings
 xelatex --shell-escape -synctex=1 -interaction=nonstopmode $BUILD_DIR/TeXLive/bin/x86_64-linux/test.tex
 
