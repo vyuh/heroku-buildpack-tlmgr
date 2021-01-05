@@ -2,9 +2,14 @@ Heroku buildpack: customizable TeX Live env with package manager
 =====================
 
 This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks)
-for (Xe)(La)TeX documents compilation on heroku. It creates anew statically-linked working TeX Live environment in $BUILD_DIR/buildpack/bin/x86_64-linux and adds into it required packages (tex_install.txt) + removes unwanted ones (tex_uninstall.txt in the app root).
+for (Xe)(La)TeX documents compilation on heroku.
+It creates anew statically-linked working TeX Live environment in
+$BUILD_DIR/buildpack/bin/x86_64-linux and
+adds into it required packages (tl_pkg.txt) +
+removes unwanted ones (tex_uninstall.txt in the app root).
 
-To use the buildpack's binaries, you need to add $BUILD_DIR/buildpack/bin/x86_64-linux at the end of PATH.
+To use the buildpack's binaries, you need to
+add $BUILD_DIR/buildpack/bin/x86_64-linux at the end of PATH.
 
 
 To run TeX compilation, try e.g. (provided you added xelatex to be installed):
@@ -37,17 +42,11 @@ Then just run usual push / deploy:
 Adding new fonts, .sty packages, etc.
 -------------------------------------
 
-If you want to add more packages, just add them into tex_install.txt file at the end of first line. (There should be one and ONLY one line!).
+If you want to add more packages,
+just add them into tl_pkg.txt file at the end of first line.
+(There should be one and ONLY one line!).
 
-If it adds some unwanted packages, you can remove it immediately after its addition by adding it into tex_uninstall.txt file at the end of first line. (There should be one and ONLY one line!).
-
-
-Local playing with XeLaTeX
---------------------------
-
-This repository is upgrade of my original one: [milos-korenciak / heroku-buildpack-tex](https://github.com/milos-korenciak/heroku-buildpack-tex.git).
-
-It is customizable in its content + packages.
-
-
-
+If it adds some unwanted packages,
+you can remove it immediately after its addition by
+adding it into tex_uninstall.txt file at the end of first line.
+(There should be one and ONLY one line!).
