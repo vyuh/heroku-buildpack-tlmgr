@@ -8,7 +8,6 @@ set -e
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
-BIN_DIR=$(cd $(dirname $0); pwd)  # absolute path
 cd $BUILD_DIR
 
 # add the XeLaTeX to the future PATH + update actual PATH
@@ -74,9 +73,6 @@ tlpdbopt_post_code 1
 
 EOF
 
-# echo "Now we are here $(pwd); BIN_DIR is this: $BIN_DIR ."
-# ls $BIN_DIR
-
 # download installer archive, open and run installer
 rm -f $INSTALLER_ARCHIVE
 curl -L $INSTALLER_URL > $INSTALLER_ARCHIVE
@@ -128,7 +124,6 @@ echo "*********************"
 echo "TeXLive environment installation and packaging complete."
 echo "Distribution: $DESTDIR"
 echo "Don't forget to add $DESTDIR/bin/$PLATFORM/ to your PATH."
-echo "Heroku buildpack binaries dir $BIN_DIR is going to be disposed."
 
 exit 0
 
