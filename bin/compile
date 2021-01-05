@@ -89,8 +89,8 @@ tar xzf $INSTALLER_ARCHIVE
 
 # Set the preferred TeXLive repo(s)
 echo "Setting the preffered CTAN repo."
-if [ -f $BUILD_DIR/tex_repos.txt ]; then
-    read -r line <$BUILD_DIR/tex_repos.txt
+if [ -f $BUILD_DIR/tex_repo.txt ]; then
+    read -r line <$BUILD_DIR/tex_repo.txt
     echo "Using custom repo from tex_repos.txt: $line"
     $DESTDIR/bin/$PLATFORM/tlmgr option repository $line
 else
@@ -104,7 +104,7 @@ $DESTDIR/bin/$PLATFORM/tlmgr update --list
 echo "Going to install required tex pckgs."
 while read -r line; do
     $DESTDIR/bin/$PLATFORM/tlmgr install $line
-done < $BUILD_DIR/tex_install.txt
+done < $BUILD_DIR/tl_pkg.txt
 # Remove custom packages
 if [ -f $BUILD_DIR/tex_uninstall.txt ]; then
     while read -r line; do
@@ -129,19 +129,6 @@ echo "TeXLive environment installation and packaging complete."
 echo "Distribution: $DESTDIR"
 echo "Don't forget to add $DESTDIR/bin/$PLATFORM/ to your PATH."
 echo "Heroku buildpack binaries dir $BIN_DIR is going to be disposed."
-
-# exit 0
-## TEST the xelatex
-# copy test .tex file for custom tests
-cp $BIN_DIR/../test.tex $BUILD_DIR/TeXLive/bin/x86_64-linux/
-mkdir -p /app/pics/
-cp $BIN_DIR/../a.png /app/pics/
-echo "Content of /app/pics"
-ls /app/pics
-# echo "we are here" 
-# pwd
-set +e  # xelatex gives non-zero exitstatus even because of warnings
-xelatex --shell-escape -synctex=1 -interaction=nonstopmode $BUILD_DIR/TeXLive/bin/x86_64-linux/test.tex
 
 exit 0
 
