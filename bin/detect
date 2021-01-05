@@ -2,8 +2,8 @@
 # bin/detect <build-dir>
 
 # this pack is valid for apps with a tex_install.txt in the app root
-if [ -f $1/tex_install.txt ]; then
-  echo "milos-korenciak/heroku-buildpack-texlive-pkg-mgr"
+if [ -f $1/tl_install.txt ]; then
+  echo "vyuh/heroku-buildpack-tlmgr"
   exit 0
 else
   exit 1
