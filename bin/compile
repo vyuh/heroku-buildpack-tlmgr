@@ -72,6 +72,8 @@ function cache_shasum_check () {
         else
             return 1
         fi
+    else
+        return 2
     fi
 }
 
