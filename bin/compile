@@ -7,16 +7,17 @@ CACHE_DIR=$2
 ENV_DIR=$3
 cd $BUILD_DIR
 
-INSTALLER_URL="ftp://tug.org/historic/systems/texlive/2019/tlnet-final/install-tl-unx.tar.gz"
+INSTALLER_URL="http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz"
 INSTALLER_ARCHIVE="$CACHE_DIR/installer-tl-unix.tar.gz"
 INSTALLER_ARCHIVE_SHASUM="$CACHE_DIR/shasum"
 PLATFORM=$(uname -m)-$(uname -s | tr A-Z a-z)
 DESTDIR=$BUILD_DIR/TeXLive
+INSTALLED_TARBALL="$CACHE_DIR/TeXLive.tgz"
 PROFILE="$CACHE_DIR/texlive.profile"
 
 # add the XeLaTeX to the future PATH + update actual PATH
-echo ":$BUILD_DIR/TeXLive/bin/$PLATFORM" >> $ENV_DIR/PATH
-echo ":$BUILD_DIR/TeXLive/bin/$PLATFORM" >> $ENV_DIR/BIN_PATH
+echo ":$DESTDIR/bin/$PLATFORM" >> $ENV_DIR/PATH
+echo ":$DESTDIR/bin/$PLATFORM" >> $ENV_DIR/BIN_PATH
 export PATH="$PATH:$BUILD_DIR/buildpack/bin/$PLATFORM"
 
 
@@ -26,12 +27,12 @@ cat > $PROFILE <<EOF
 # It will NOT be updated and reflects only the
 # installation profile at installation time.
 selected_scheme scheme-minimal
-TEXDIR $BUILD_DIR/TexLive
+TEXDIR $DESTDIR
 TEXMFCONFIG \$TEXMFSYSCONFIG
 TEXMFHOME \$TEXMFLOCAL
-TEXMFLOCAL $BUILD_DIR/TexLive/texmf-local
-TEXMFSYSCONFIG $BUILD_DIR/TexLive/texmf-config
-TEXMFSYSVAR $BUILD_DIR/TexLive/texmf-var
+TEXMFLOCAL $DESTDIR/texmf-local
+TEXMFSYSCONFIG $DESTDIR/texmf-config
+TEXMFSYSVAR $DESTDIR/texmf-var
 TEXMFVAR \$TEXMFSYSVAR
 binary_x86_64-linux 1
 instopt_adjustpath 1
@@ -54,47 +55,36 @@ tlpdbopt_sys_man /usr/local/share/man
 tlpdbopt_w32_multi_user 1
 EOF
 
-cat > $INSTALLER_ARCHIVE_SHASUM <<EOF
-ae330a14325a6658629b548f9a6a3d38a6877d67  $INSTALLER_ARCHIVE
-EOF
-
+if test -r $INSTALLED_TARBALL && tar xzvf $INSTALLED_TARBALL -C $BUILD_DIR; then
+    echo used cached installation $INSTALLED_TARBALL
+else
 # download installer archive, open and run installer
 if test -r $INSTALLER_ARCHIVE && shasum --check $INSTALLER_ARCHIVE_SHASUM; then
     echo "Using old install_tl archive."
 else
     rm -f $INSTALLER_ARCHIVE
     wget $INSTALLER_URL --output-document=$INSTALLER_ARCHIVE
+    shasum $INSTALLER_ARCHIVE > $INSTALLER_ARCHIVE_SHASUM
 fi
-if false; then
+
 tar xzf $INSTALLER_ARCHIVE
-./"install-tl-"*/install-tl --repository=http://tug.org/historic/systems/texlive/2019/tlnet-final --profile=$PROFILE
-fi
+./"install-tl-"*/install-tl --profile=$PROFILE
 
 echo "Update CTAN pckgs list."
 $DESTDIR/bin/$PLATFORM/tlmgr update --list
 
-# Add custom packages
-echo "Going to install required tex pckgs."
-while read -r line; do
-    $DESTDIR/bin/$PLATFORM/tlmgr install $line
-done < $BUILD_DIR/tl_pkg.txt
-# Remove custom packages
-if [ -f $BUILD_DIR/tex_uninstall.txt ]; then
-    while read -r line; do
-        $DESTDIR/bin/$PLATFORM/tlmgr remove --force $line
-    done < $BUILD_DIR/tex_uninstall.txt
-else
-    echo "No package to uninstall (empty tex_uninstall.txt)."
+tar czvf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
 fi
 
-# Keep a copy of our profile
-cp $PROFILE $DESTDIR/install.profile
+# Add custom packages
+echo "Going to install required tex pckgs."
+$DESTDIR/bin/$PLATFORM/tlmgr install $(cat $BUILD_DIR/tl_pkg.txt)
 
 ## add to PATH
 echo "exporting PATH "
 PROFILE_PATH="$BUILD_DIR/.profile.d/texlive-path-parts.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="$PATH:$HOME/TeXLive/bin/x86_64-linux"' >> $PROFILE_PATH
+echo 'export PATH="$PATH:$HOME/TeXLive/bin/$PLATFORM"' >> $PROFILE_PATH
 
 # final message
 echo "*********************"
