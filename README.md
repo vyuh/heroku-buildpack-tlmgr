@@ -2,51 +2,23 @@ Heroku buildpack: customizable TeX Live env with package manager
 =====================
 
 This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks)
-for (Xe)(La)TeX documents compilation on heroku.
-It creates anew statically-linked working TeX Live environment in
-$BUILD_DIR/buildpack/bin/x86_64-linux and
-adds into it required packages (tl_pkg.txt) +
-removes unwanted ones (tex_uninstall.txt in the app root).
+for installing `texlive plain` on heroku.
+It creates a portable TeX Live installation in `$BUILD_DIR/TeXLive` and
+adds into it required packages (tl_pkg.txt).
 
 To use the buildpack's binaries, you need to
-add $BUILD_DIR/buildpack/bin/x86_64-linux at the end of PATH.
+add `$BUILD_DIR/buildpack/bin/$PLATFORM` at the end of `PATH`.
 
-
-To run TeX compilation, try e.g. (provided you added xelatex to be installed):
-
-    $ xelatex --shell-escape -synctex=1 -interaction=nonstopmode $BUILD_DIR/buildpack/bin/x86_64-linux/test.tex
-    
 
 Note:
-The creation of the buildpack can last 15 min at max. Then it is forcibly stopped by heroku. Do not add TOO much packages!
+The creation of the buildpack can last 15 min at max.
+Then it is forcibly stopped by heroku.
+Do not add TOO much packages!
+
+This buildpack is useless if used alone.
+See https://devcenter.heroku.com/articles/using-multiple-buildpacks-for-an-app
+to learn how to add this buildpack to an existing app.
 
 
-How to add this buildpack as second one
----------------------------------------
-
-Just run from commandline
-
-    $ heroku buildpacks:add --index 2 https://github.com/milos-korenciak/heroku-buildpack-tex.git
-
-Then just run usual push / deploy:
-
-    $ git push heroku master
-    ...
-    Heroku receiving push
-    Fetching custom build pack... done
-    XeLaTeX app detected
-    Fetching XeLaTeX Live statically linked
-    ...
-
-
-Adding new fonts, .sty packages, etc.
--------------------------------------
-
-If you want to add more packages,
-just add them into tl_pkg.txt file at the end of first line.
-(There should be one and ONLY one line!).
-
-If it adds some unwanted packages,
-you can remove it immediately after its addition by
-adding it into tex_uninstall.txt file at the end of first line.
-(There should be one and ONLY one line!).
+If you want to add more packages than a plain TeXLive distribution has,
+just add its name to `tl_pkg.txt`.
