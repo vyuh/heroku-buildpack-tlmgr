@@ -73,9 +73,6 @@ tar xzf $INSTALLER_ARCHIVE
 echo "Update CTAN pckgs list."
 $DESTDIR/bin/$PLATFORM/tlmgr update --list
 
-tar czvf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
-fi
-
 # Add custom packages
 echo "Going to install required tex pckgs."
 $DESTDIR/bin/$PLATFORM/tlmgr install $(cat $BUILD_DIR/tl_pkg.txt)
@@ -85,6 +82,9 @@ echo "exporting PATH "
 PROFILE_PATH="$BUILD_DIR/.profile.d/texlive-path-parts.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 echo 'export PATH="$PATH:$HOME/TeXLive/bin/$PLATFORM"' >> $PROFILE_PATH
+
+tar czvf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
+fi
 
 # final message
 echo "*********************"
