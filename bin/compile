@@ -113,7 +113,7 @@ fi
 echo "exporting PATH "
 PROFILE_PATH="$BUILD_DIR/.profile.d/texlive-path-parts.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-printf 'export PATH="$PATH:$HOME/TeXLive/bin/%s' "$PLATFORM" > $PROFILE_PATH
+printf 'export PATH="$PATH:$HOME/TeXLive/bin/%s"' "$PLATFORM" > $PROFILE_PATH
 
 # final message
 echo "*********************"
