@@ -75,7 +75,7 @@ function cache_shasum_check () {
     fi
 }
 
-if cache_shasum_check $INSTALLED_TARBALL && tar xzvf $INSTALLED_TARBALL -C $BUILD_DIR; then
+if cache_shasum_check $INSTALLED_TARBALL && tar xzf $INSTALLED_TARBALL -C $BUILD_DIR; then
     echo used cached installation $INSTALLED_TARBALL
 else
 
