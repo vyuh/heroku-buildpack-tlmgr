@@ -1,7 +1,7 @@
 # Customizable TeX Live Environment in Heroku
 
 This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks)
-for installing `texlive plain` on heroku.
+for installing Texlive [`scheme-minimal`](https://tug.org/texlive/doc/texlive-en/texlive-en.html#x1-250003.2.2) on heroku.
 
 This buildpack is useless if used alone.
 See https://devcenter.heroku.com/articles/using-multiple-buildpacks-for-an-app
