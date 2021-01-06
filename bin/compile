@@ -57,16 +57,16 @@ EOF
 function cache_shasum_save {
     FILE=$1
     SHASUM="$CACHE_DIR/$(basename $1).shasum"
-    if test -r "$FILE" then
-        pushd $(dirname $FILE) && shasum $(basename $FILE) > $SHASUM
+    if test -r "$FILE"; then
+        pushd $(dirname $FILE) && shasum $(basename $FILE) > $SHASUM && popd;
     fi
 }
 
 function cache_shasum_check () {
     FILE=$1
     SHASUM="$CACHE_DIR/$(basename $1).shasum"
-    if test -r "$FILE" -a -r "$SHASUM" then
-        if pushd $(dirname $FILE) && shasum --check $SHASUM then
+    if test -r "$FILE" -a -r "$SHASUM"; then
+        if pushd $(dirname $FILE) && shasum --check "$SHASUM"; then
             popd;
             return 0
         else
@@ -79,7 +79,7 @@ if cache_shasum_check $INSTALLED_TARBALL && tar xzvf $INSTALLED_TARBALL -C $BUIL
     echo used cached installation $INSTALLED_TARBALL
 else
 
-if cache_shasum_check $INSTALLER_ARCHIVE then
+if cache_shasum_check $INSTALLER_ARCHIVE; then
     echo "Using old install_tl archive."
 else
     rm -f $INSTALLER_ARCHIVE
@@ -97,7 +97,7 @@ cache_shasum_save $INSTALLED_TARBALL
 
 fi
 
-if cache_shasum_check $TLPKGS then
+if cache_shasum_check $TLPKGS; then
     echo "Nothing new to install."
 else
     if test -r $TLPKGS; then
