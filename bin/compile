@@ -9,11 +9,13 @@ cd $BUILD_DIR
 
 INSTALLER_URL="http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz"
 INSTALLER_ARCHIVE="$CACHE_DIR/installer-tl-unix.tar.gz"
-INSTALLER_ARCHIVE_SHASUM="$CACHE_DIR/shasum"
+INSTALLER_ARCHIVE_SHASUM="$CACHE_DIR/installer_shasum"
 PLATFORM=$(uname -m)-$(uname -s | tr A-Z a-z)
 DESTDIR=$BUILD_DIR/TeXLive
 INSTALLED_TARBALL="$CACHE_DIR/TeXLive.tgz"
 PROFILE="$CACHE_DIR/texlive.profile"
+TLPKGS="$BUILD_DIR/tl_pkg.txt"
+TLPKGS_SHASUM="$CACHE_DIR/tl_pkg_shasum"
 
 # add the XeLaTeX to the future PATH + update actual PATH
 echo ":$DESTDIR/bin/$PLATFORM" >> $ENV_DIR/PATH
@@ -63,7 +65,7 @@ if test -r $INSTALLER_ARCHIVE && shasum --check $INSTALLER_ARCHIVE_SHASUM; then
     echo "Using old install_tl archive."
 else
     rm -f $INSTALLER_ARCHIVE
-    wget $INSTALLER_URL --output-document=$INSTALLER_ARCHIVE
+    wget --quiet $INSTALLER_URL --output-document=$INSTALLER_ARCHIVE
     shasum $INSTALLER_ARCHIVE > $INSTALLER_ARCHIVE_SHASUM
 fi
 
@@ -73,9 +75,6 @@ tar xzf $INSTALLER_ARCHIVE
 echo "Update CTAN pckgs list."
 $DESTDIR/bin/$PLATFORM/tlmgr update --list
 
-# Add custom packages
-echo "Going to install required tex pckgs."
-$DESTDIR/bin/$PLATFORM/tlmgr install $(cat $BUILD_DIR/tl_pkg.txt)
 
 ## add to PATH
 echo "exporting PATH "
@@ -83,7 +82,21 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/texlive-path-parts.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 echo 'export PATH="$PATH:$HOME/TeXLive/bin/$PLATFORM"' >> $PROFILE_PATH
 
+echo "Going to install required tex pckgs."
+$DESTDIR/bin/$PLATFORM/tlmgr install $(cat $TLPKGS)
+shasum $TLPKGS > $TLPKGS_SHASUM
 tar czvf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
+
+fi
+
+if shasum --check $TLPKGS_SHASUM; then
+    echo "Nothing new to install."
+else
+    # Add custom packages
+    echo "Going to install required tex pckgs."
+    $DESTDIR/bin/$PLATFORM/tlmgr install $(cat $TLPKGS)
+    shasum $TLPKGS > $TLPKGS_SHASUM
+    tar azvf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
 fi
 
 # final message
