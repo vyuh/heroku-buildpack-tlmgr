@@ -106,7 +106,7 @@ else
     echo "Going to install required tex pckgs."
     $DESTDIR/bin/$PLATFORM/tlmgr install $(cat $TLPKGS)
     cache_shasum_save $TLPKGS
-    tar azf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
+    tar uzf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
     cache_shasum_save $INSTALLED_TARBALL
     fi
 fi
