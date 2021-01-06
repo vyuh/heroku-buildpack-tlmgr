@@ -1,98 +1,75 @@
 #!/usr/bin/env bash
 # bin/compile <BUILD_DIR> <CACHE_DIR> <ENV_DIR>
 
-# Abort on errors!
-set -e
-
 # Paths constants
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 cd $BUILD_DIR
 
-# add the XeLaTeX to the future PATH + update actual PATH
-echo ":$BUILD_DIR/TeXLive/bin/x86_64-linux" >> $ENV_DIR/PATH
-echo ":$BUILD_DIR/TeXLive/bin/x86_64-linux" >> $ENV_DIR/BIN_PATH
-export PATH="$PATH:$BUILD_DIR/buildpack/bin/x86_64-linux"
-
-INSTALLER_URL="http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz"
-INSTALLER_ARCHIVE="installer-tl-unix.tar.gz"
+INSTALLER_URL="ftp://tug.org/historic/systems/texlive/2019/tlnet-final/install-tl-unx.tar.gz"
+INSTALLER_ARCHIVE="$CACHE_DIR/installer-tl-unix.tar.gz"
+INSTALLER_ARCHIVE_SHASUM="$CACHE_DIR/shasum"
 PLATFORM=$(uname -m)-$(uname -s | tr A-Z a-z)
 DESTDIR=$BUILD_DIR/TeXLive
-PROFILE="texlive.profile"
+PROFILE="$CACHE_DIR/texlive.profile"
+
+# add the XeLaTeX to the future PATH + update actual PATH
+echo ":$BUILD_DIR/TeXLive/bin/$PLATFORM" >> $ENV_DIR/PATH
+echo ":$BUILD_DIR/TeXLive/bin/$PLATFORM" >> $ENV_DIR/BIN_PATH
+export PATH="$PATH:$BUILD_DIR/buildpack/bin/$PLATFORM"
 
 
-# Prepare profile for install-tl script
 rm -f $PROFILE
 cat > $PROFILE <<EOF
-# texlive.profile written on St feb 20 07:47:02 CET 2019
+# texlive.profile written on Tue Jan  5 08:15:44 2021 UTC
 # It will NOT be updated and reflects only the
 # installation profile at installation time.
-selected_scheme scheme-custom
-TEXDIR $BUILD_DIR/TeXLive
+selected_scheme scheme-minimal
+TEXDIR $BUILD_DIR/TexLive
 TEXMFCONFIG \$TEXMFSYSCONFIG
 TEXMFHOME \$TEXMFLOCAL
-TEXMFLOCAL $BUILD_DIR/TeXLive/texmf-local
-TEXMFSYSCONFIG $BUILD_DIR/TeXLive/texmf-config
-TEXMFSYSVAR $BUILD_DIR/TeXLive/texmf-var
-TEXMFVAR /tmp
-
+TEXMFLOCAL $BUILD_DIR/TexLive/texmf-local
+TEXMFSYSCONFIG $BUILD_DIR/TexLive/texmf-config
+TEXMFSYSVAR $BUILD_DIR/TexLive/texmf-var
+TEXMFVAR \$TEXMFSYSVAR
 binary_x86_64-linux 1
-
-collection-basic 1
-## comment the following collection-* to MINIMIZE the texlive installation size + compile time!
-# collection-fontsrecommended 1
-# collection-fontutils 1
-# collection-formatsextra 1
-# collection-pictures 1
-# collection-texworks 1
-collection-xetex 1
-
-option_adjustrepo 1
-option_autobackup 1
-option_backupdir tlpkg/backups
-option_desktop_integration
-option_doc 0
-option_file_assocs 
-option_fmt 1
-option_letter
-option_path
-option_post_code 1
-option_src 0
-option_sys_bin /usr/local/bin
-option_sys_info /usr/local/share/info
-option_sys_man /usr/local/share/man
-option_w32_multi_user 1
-option_write18_restricted 1
-portable 1
-
+instopt_adjustpath 1
+instopt_adjustrepo 1
+instopt_letter 0
+instopt_portable 1
+instopt_write18_restricted 1
+tlpdbopt_autobackup 1
+tlpdbopt_backupdir tlpkg/backups
 tlpdbopt_create_formats 1
-tlpdbopt_generate_updmap 1
+tlpdbopt_desktop_integration 1
+tlpdbopt_file_assocs 1
+tlpdbopt_generate_updmap 0
+tlpdbopt_install_docfiles 1
 tlpdbopt_install_srcfiles 1
 tlpdbopt_post_code 1
+tlpdbopt_sys_bin /usr/local/bin
+tlpdbopt_sys_info /usr/local/share/info
+tlpdbopt_sys_man /usr/local/share/man
+tlpdbopt_w32_multi_user 1
+EOF
 
+cat > $INSTALLER_ARCHIVE_SHASUM <<EOF
+ae330a14325a6658629b548f9a6a3d38a6877d67  $INSTALLER_ARCHIVE
 EOF
 
 # download installer archive, open and run installer
-rm -f $INSTALLER_ARCHIVE
-curl -L $INSTALLER_URL > $INSTALLER_ARCHIVE
-rm -rf ./"install-tl-"*/  # remove possible offending old installer
-tar xzf $INSTALLER_ARCHIVE
-./"install-tl-"*/install-tl -profile $PROFILE
-
-
-# Update packages list
-
-# Set the preferred TeXLive repo(s)
-echo "Setting the preffered CTAN repo."
-if [ -f $BUILD_DIR/tex_repo.txt ]; then
-    read -r line <$BUILD_DIR/tex_repo.txt
-    echo "Using custom repo from tex_repos.txt: $line"
-    $DESTDIR/bin/$PLATFORM/tlmgr option repository $line
+if test -r $INSTALLER_ARCHIVE && shasum --check $INSTALLER_ARCHIVE_SHASUM; then
+    echo "Using old install_tl archive."
 else
-    echo "No custom repo specified in tex_repos.txt. Using default ones."
-    $DESTDIR/bin/$PLATFORM/tlmgr option repository ctan
+    rm -f $INSTALLER_ARCHIVE
+    wget $INSTALLER_URL --output-document=$INSTALLER_ARCHIVE
 fi
+if false; then
+tar xzf $INSTALLER_ARCHIVE
+./"install-tl-"*/install-tl --repository=http://tug.org/historic/systems/texlive/2019/tlnet-final --profile=$PROFILE
+fi
+
 echo "Update CTAN pckgs list."
 $DESTDIR/bin/$PLATFORM/tlmgr update --list
 
@@ -111,7 +88,7 @@ else
 fi
 
 # Keep a copy of our profile
-cp $BUILD_DIR/$PROFILE $DESTDIR/tlpkg/install.profile
+cp $PROFILE $DESTDIR/install.profile
 
 ## add to PATH
 echo "exporting PATH "
