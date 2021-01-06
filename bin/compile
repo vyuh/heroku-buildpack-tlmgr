@@ -76,12 +76,6 @@ echo "Update CTAN pckgs list."
 $DESTDIR/bin/$PLATFORM/tlmgr update --list
 
 
-## add to PATH
-echo "exporting PATH "
-PROFILE_PATH="$BUILD_DIR/.profile.d/texlive-path-parts.sh"
-mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="$PATH:$HOME/TeXLive/bin/$PLATFORM"' >> $PROFILE_PATH
-
 echo "Going to install required tex pckgs."
 $DESTDIR/bin/$PLATFORM/tlmgr install $(cat $TLPKGS)
 shasum $TLPKGS > $TLPKGS_SHASUM
@@ -98,6 +92,12 @@ else
     shasum $TLPKGS > $TLPKGS_SHASUM
     tar azvf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
 fi
+
+## add to PATH
+echo "exporting PATH "
+PROFILE_PATH="$BUILD_DIR/.profile.d/texlive-path-parts.sh"
+mkdir -p $(dirname $PROFILE_PATH)
+echo "export PATH="$PATH:\$HOME/TeXLive/bin/$PLATFORM" >> $PROFILE_PATH
 
 # final message
 echo "*********************"
