@@ -16,12 +16,11 @@ INSTALLED_TARBALL="$CACHE_DIR/TeXLive.tgz"
 PROFILE="$CACHE_DIR/texlive.profile"
 TLPKGS="$BUILD_DIR/tl_pkg.txt"
 
-echo ":$DESTDIR/bin/$PLATFORM" >> $ENV_DIR/PATH
-echo ":$DESTDIR/bin/$PLATFORM" >> $ENV_DIR/BIN_PATH
-
+echo ":$DESTDIR/bin/$PLATFORM" >>$ENV_DIR/PATH
+echo ":$DESTDIR/bin/$PLATFORM" >>$ENV_DIR/BIN_PATH
 
 rm -f $PROFILE
-cat > $PROFILE <<EOF
+cat >$PROFILE <<EOF
 # texlive.profile written on Tue Jan  5 08:15:44 2021 UTC
 # It will NOT be updated and reflects only the
 # installation profile at installation time.
@@ -55,68 +54,68 @@ tlpdbopt_w32_multi_user 1
 EOF
 
 function cache_shasum_save {
-    FILE=$1
-    SHASUM="$CACHE_DIR/$(basename $1).shasum"
-    if test -r "$FILE"; then
-        pushd $(dirname $FILE) && shasum $(basename $FILE) > $SHASUM && popd;
-    fi
+	FILE=$1
+	SHASUM="$CACHE_DIR/$(basename $1).shasum"
+	if test -r "$FILE"; then
+		pushd $(dirname $FILE) && shasum $(basename $FILE) >$SHASUM && popd
+	fi
 }
 
-function cache_shasum_check () {
-    FILE=$1
-    SHASUM="$CACHE_DIR/$(basename $1).shasum"
-    if test -r "$FILE" -a -r "$SHASUM"; then
-        if pushd $(dirname $FILE) && shasum --check "$SHASUM"; then
-            popd;
-            return 0
-        else
-            return 1
-        fi
-    else
-        return 2
-    fi
+function cache_shasum_check() {
+	FILE=$1
+	SHASUM="$CACHE_DIR/$(basename $1).shasum"
+	if test -r "$FILE" -a -r "$SHASUM"; then
+		if pushd $(dirname $FILE) && shasum --check "$SHASUM"; then
+			popd
+			return 0
+		else
+			return 1
+		fi
+	else
+		return 2
+	fi
 }
 
 if cache_shasum_check $INSTALLED_TARBALL && tar xzf $INSTALLED_TARBALL -C $BUILD_DIR; then
-    echo used cached installation $INSTALLED_TARBALL
+	echo used cached installation $INSTALLED_TARBALL
 else
 
-if cache_shasum_check $INSTALLER_ARCHIVE; then
-    echo "Using old install_tl archive."
-else
-    rm -f $INSTALLER_ARCHIVE
-    wget --quiet $INSTALLER_URL --output-document=$INSTALLER_ARCHIVE
-    cache_shasum_save $INSTALLER_ARCHIVE
-fi
+	if cache_shasum_check $INSTALLER_ARCHIVE; then
+		echo "Using old install_tl archive."
+	else
+		rm -f $INSTALLER_ARCHIVE
+		wget --quiet $INSTALLER_URL --output-document=$INSTALLER_ARCHIVE
+		cache_shasum_save $INSTALLER_ARCHIVE
+	fi
 
-tar xzf $INSTALLER_ARCHIVE
-./"install-tl-"*/install-tl --profile=$PROFILE
+	tar xzf $INSTALLER_ARCHIVE
+	./"install-tl-"*/install-tl --profile=$PROFILE
 
-$DESTDIR/bin/$PLATFORM/tlmgr update --list
+	$DESTDIR/bin/$PLATFORM/tlmgr update --list
 
-tar czf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
-cache_shasum_save $INSTALLED_TARBALL
+	tar czf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
+	cache_shasum_save $INSTALLED_TARBALL
 
 fi
 
 if cache_shasum_check $TLPKGS; then
-    echo "Nothing new to install."
+	echo "Nothing new to install."
 else
-    if test -r $TLPKGS; then
-    echo "Going to install required tex pckgs."
-    $DESTDIR/bin/$PLATFORM/tlmgr install $(cat $TLPKGS)
-    cache_shasum_save $TLPKGS
-    rm -f $INSTALLED_TARBALL
-    tar czf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
-    cache_shasum_save $INSTALLED_TARBALL
-    fi
+	if test -r $TLPKGS; then
+		echo "Going to install required tex pckgs."
+		$DESTDIR/bin/$PLATFORM/tlmgr install $(cat $TLPKGS)
+		cache_shasum_save $TLPKGS
+		rm -f $INSTALLED_TARBALL
+		tar czf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
+		cache_shasum_save $INSTALLED_TARBALL
+	fi
 fi
 
 ## add to PATH
 echo "exporting PATH "
 PROFILE_PATH="$BUILD_DIR/.profile.d/texlive-path-parts.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-printf 'export PATH="$PATH:$HOME/TeXLive/bin/%s"' "$PLATFORM" > $PROFILE_PATH
+printf 'export PATH="$PATH:$HOME/TeXLive/bin/%s"' "$PLATFORM" >$PROFILE_PATH
 
 # final message
 echo "*********************"
@@ -125,4 +124,3 @@ echo "Distribution: $DESTDIR"
 echo "Don't forget to add $DESTDIR/bin/$PLATFORM/ to your PATH."
 
 exit 0
-
