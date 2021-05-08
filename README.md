@@ -22,6 +22,6 @@ Example `tl_plg.txt`:
 
 
 Note:
-The creation of the buildpack can last 15 min at max.
+The creation of the buildpack can last at most 15 minutes.
 Then it is forcibly stopped by heroku.
-Do not add TOO much packages!
+Do not add too many packages.
