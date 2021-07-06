@@ -93,7 +93,6 @@ else
 	./"install-tl-"*/install-tl --profile=$PROFILE
 
     $DESTDIR/bin/$PLATFORM/tlmgr option repository ftp://tug.org/historic/systems/texlive/2020/tlnet-final
-
     $DESTDIR/bin/$PLATFORM/tlmgr update --self
     $DESTDIR/bin/$PLATFORM/tlmgr update --list
 
@@ -107,7 +106,10 @@ if cache_shasum_check $TLPKGS; then
 else
 	if test -r $TLPKGS; then
 		echo "Going to install required tex packgs."
-        #$DESTDIR/bin/$PLATFORM/tlmgr option repository ftp://tug.org/historic/systems/texlive/2020/tlnet-final
+    $DESTDIR/bin/$PLATFORM/tlmgr option repository ftp://tug.org/historic/systems/texlive/2020/tlnet-final
+    $DESTDIR/bin/$PLATFORM/tlmgr update --self
+    $DESTDIR/bin/$PLATFORM/tlmgr update --list
+
 		$DESTDIR/bin/$PLATFORM/tlmgr install $(cat $TLPKGS)
 		cache_shasum_save $TLPKGS
 		rm -f $INSTALLED_TARBALL
