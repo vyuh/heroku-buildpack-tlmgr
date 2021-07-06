@@ -91,7 +91,9 @@ else
 	tar xzf $INSTALLER_ARCHIVE
 	./"install-tl-"*/install-tl --profile=$PROFILE
 
-	$DESTDIR/bin/$PLATFORM/tlmgr update --list
+    $DESTDIR/bin/$PLATFORM/tlmgr option repository ftp://tug.org/historic/systems/texlive/2020/tlnet-final
+
+    $DESTDIR/bin/$PLATFORM/tlmgr update --list
 
 	tar czf $INSTALLED_TARBALL -C $BUILD_DIR TeXLive
 	cache_shasum_save $INSTALLED_TARBALL
