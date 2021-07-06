@@ -8,7 +8,8 @@ ENV_DIR=$3
 
 cd $CACHE_DIR
 
-INSTALLER_URL="http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz"
+INSTALLER_URL="http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2020/install-tl-unx.tar.gz"
+#"http://mirror.ctan.org/systems/texlive/2020/install-tl-unx.tar.gz"
 INSTALLER_ARCHIVE="$CACHE_DIR/installer-tl-unix.tar.gz"
 PLATFORM=$(uname -m)-$(uname -s | tr A-Z a-z)
 DESTDIR=$BUILD_DIR/TeXLive
@@ -104,7 +105,8 @@ if cache_shasum_check $TLPKGS; then
 	echo "Nothing new to install."
 else
 	if test -r $TLPKGS; then
-		echo "Going to install required tex pckgs."
+		echo "Going to install required tex packgs."
+        $DESTDIR/bin/$PLATFORM/tlmgr option repository ftp://tug.org/historic/systems/texlive/2020/tlnet-final
 		$DESTDIR/bin/$PLATFORM/tlmgr install $(cat $TLPKGS)
 		cache_shasum_save $TLPKGS
 		rm -f $INSTALLED_TARBALL
