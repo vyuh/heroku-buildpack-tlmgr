@@ -7,6 +7,9 @@ This buildpack is useless if used alone.
 See https://devcenter.heroku.com/articles/using-multiple-buildpacks-for-an-app
 to learn how to add this buildpack to an existing app.
 
+    heroku buildpacks:add --index 1 https://github.com/vyuh/heroku-buildpack-tlmgr
+
+
 This buildpack looks for the file `tl_pkg.txt` in the app's root directory
 and creates a portable TeX Live installation in `$BUILD_DIR/TeXLive`.
 The installation only has packages included in the plain scheme.
